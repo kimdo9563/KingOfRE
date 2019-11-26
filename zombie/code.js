@@ -106,6 +106,20 @@ money.prototype.change = function(change_money_amount) {
         player_money = changed_money;
 }
 
+function quest(){};
+    /*
+    // Prototype Description
+    create         :   UI에 퀘스트 생성
+    change         :   소지금 변경(eg.상점 이용, 플레어 사망 시)
+    */
+quest.prototype.create = function() {
+    for (var i = 0; i < room_list.length; i++){
+            room = room_list[i];
+            room.quest = new room_ui(room, "quest", "quest.png", 50, 250, 50);
+            room.quest.onClick = function() {printMessage("quest test")}
+    }
+}
+
 /*
 =====================
 |    객체 관련 Func
@@ -138,6 +152,8 @@ _1st_floor_three = game.createRoom("_1st_floor_three", "background.png");
 
 _2nd_floor_one = game.createRoom("_2nd_floor_one", "_2nd_floor_one.png");
 
+
+
 // 라이프와, 소지금이 보이길 원하는 방을 생성하면, room_list 배열에 동기화 필수!
 var room_list = new Array(
     _1st_floor_one,
@@ -153,11 +169,14 @@ var Life = new life();  //플레이어 라이프 조작을 위한 객체 생성
 Life.create()
 var Money = new money();  //플레이어 소지금 조작을 위한 객체 생성
 Money.create()
+var Quest = new quest();
+Quest.create()
 
 //==========================================================================================
 /* elevator */
 
 _elevator.button = new empty_box(_elevator, "button", 80, 1100, 330, _elevator_button)
+_elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 550, 500, _1st_floor_three)
 _elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 700, 500, _2nd_floor_one)
 
 //==========================================================================================
@@ -177,6 +196,42 @@ _1st_floor_three.elevator.onClick = function () { game.move(_elevator)}
 
 
 _1st_floor_one.zombie = new zombie(_1st_floor_one, "zombie", "zombie.png", 200, 1000, 500);
+_1st_floor_one.zombie.onClick = function() { Life.change(-10)}
+
+
+
+//=============================================================================================
+/* 2nd floor */
+
+
+
+//=============================================================================================
+/* 3rd floor */
+
+
+
+//=============================================================================================
+/* 4th floor */
+
+
+
+//=============================================================================================
+/* 5th floor */
+
+
+
+//=============================================================================================
+/* 6th floor */
+
+
+
+//=============================================================================================
+/* 7th floor */
+
+
+
+//=============================================================================================
+/* roof_top */
 
 
 
