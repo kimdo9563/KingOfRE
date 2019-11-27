@@ -218,9 +218,12 @@ Quest.create()
 //==========================================================================================
 /* elevator */
 
-_elevator.button = new empty_box(_elevator, "button", 80, 1100, 330, _elevator_button)
-_elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 550, 500, _1st_floor_three)
-_elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 700, 500, _2nd_floor_one)
+_elevator.button_1 = new empty_box(_elevator, "button_1", 80, 1040, 420, _elevator_button)
+_elevator.button_2 = new empty_box(_elevator, "button_2", 80, 1040, 485, _elevator_button)
+_elevator.button_3 = new empty_box(_elevator, "button_3", 80, 1040, 550, _elevator_button)
+_elevator.button_4 = new empty_box(_elevator, "button_4", 80, 1040, 590, _elevator_button)
+_elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 580, 530, _1st_floor_three)
+_elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 685, 530, _2nd_floor_one)
 
 //==========================================================================================
 /* 1st floor */
