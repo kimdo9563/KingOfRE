@@ -27,9 +27,9 @@ room_ui.prototype.constructor = room_ui;
 
 function arrow(room, name, go_to_room) {
     if (name == "left_arrow") {
-        room_ui.call(this, room, name, "left_arrow.png", 50, 30, 360)
+        room_ui.call(this, room, name, "left_arrow.png", 150, 100, 360)
     } else if (name == "right_arrow") {
-        room_ui.call(this, room, name, "right_arrow.png", 50, 1250, 360)
+        room_ui.call(this, room, name, "right_arrow.png", 150, 1200, 360)
     }
 
     this.go_to_room = go_to_room;
@@ -224,8 +224,9 @@ _1st_floor_two = game.createRoom("_1st_floor_two", "background.png");
 _1st_floor_three = game.createRoom("_1st_floor_three", "background.png");
 
 _2nd_floor_one = game.createRoom("_2nd_floor_one", "_2nd_floor_one.png");
-
-
+_3rd_floor_one = game.createRoom("_3rd_floor_one","지옥문_1.png")
+_3rd_floor_two = game.createRoom("_3rd_floor_two","헬스장_1.jpg")
+_3rd_floor_three = game.createRoom("_3rd_floor_three","헬스장_2.jpg")
 
 // 라이프와, 소지금이 보이길 원하는 방을 생성하면, room_list 배열에 동기화 필수!
 var room_list = new Array(
@@ -233,7 +234,9 @@ var room_list = new Array(
     _1st_floor_one,
     _1st_floor_two,
     _1st_floor_three,
-    _2nd_floor_one);
+    _2nd_floor_one,
+    _elevator,
+    _3rd_floor_one);
 
 //초기값
 var player_life = 100;
@@ -326,6 +329,111 @@ _2nd_floor_one.test_item.onClick = function() { _2nd_floor_one.test_item.obj.pic
 //=============================================================================================
 /* 3rd floor */
 
+// 사내 헬스장 좀비 출물 지역!
+
+/*3층용 객체 */
+function randomLocationX(){
+randomValue = Math.random();
+intValue = (randomValue * 950)+50;
+return intValue
+}
+function randomLocationY(){
+randomValue = Math.random();
+intValue = (randomValue * 700)+ 50;
+return intValue
+}
+
+var countUp = 0
+
+function fps(room, name, image, width, x_loc, y_loc) {
+    this.room = room;
+    this.name = name;
+    this.image = image;
+    this.width = width;
+    this.x_loc = x_loc;
+    this.y_loc = y_loc;
+
+    this.obj = room.createObject(name, image);
+    this.obj.setWidth(width);
+    room.locateObject(this.obj, x_loc, y_loc);
+    this.obj.hide()
+    this.obj.lock()
+
+}
+fps.prototype.onClick = function(){
+if(this.obj.isLocked()){
+countUp += 1
+}
+this.obj.unlock()
+this.obj.setSprite("blood.png")
+
+if(countUp > 9){
+game.hideTimer()
+printMessage("공습에서 살아남으셨습니다")
+_3rd_floor_three.dark_portal.obj.show()
+}
+}
+
+_3rd_floor_one.health_door = new empty_box(_3rd_floor_one,"health_door",450,600,400,_3rd_floor_two) //문에 투명 공간
+_3rd_floor_one.health_door.obj.hide()
+//_3rd_floor_one.chain = _3rd_floor_one.createObject("chain","쇠사슬_1.png")
+//_3rd_floor_one.chain.setWidth(500)
+//_3rd_floor_one.locateObject(_3rd_floor_one.chain,650,400)
+//_3rd_floor_one.chain.obj.lock()
+_3rd_floor_one.chain = new obj(_3rd_floor_one,"chain","쇠사슬_1.png",500,650,400)
+_3rd_floor_one.muscle = new obj(_3rd_floor_one,"muscle","근육좀비_1.png",500,200,400)
+
+_3rd_floor_one.chain.obj.lock()
+
+
+//onClick 재정의
+_3rd_floor_one.muscle.onClick = function() { printMessage("넌 못지나간다!")
+ game.printStory("약력\n스쿼트: 250kg\n벤치프레스: 400kg\n 데드리프트: 500kg\n 턱걸이: 80회\n 팔굽혀펴기: 100회")}
+
+_3rd_floor_one.chain.onClick = function(){
+    printMessage("3대 중량을 입력해라.")
+    showKeypad("number","1150",function(){
+        _3rd_floor_one.chain.obj.unlock()
+        printMessage("프로틴...근손실...")
+        _3rd_floor_one.chain.obj.hide()
+        _3rd_floor_one.health_door.obj.show()
+    })
+}
+
+_3rd_floor_two._3rd_zombie_1 = new fps(_3rd_floor_two,"_3rd_zombie_1","3층좀비_1.png",100,randomLocationX(),randomLocationY())
+_3rd_floor_two._3rd_zombie_2 = new fps(_3rd_floor_two,"_3rd_zombie_2","3층좀비_2.png",110,randomLocationX(),randomLocationY())
+_3rd_floor_two._3rd_zombie_3 = new fps(_3rd_floor_two,"_3rd_zombie_3","3층좀비_3.png",120,randomLocationX(),randomLocationY())
+_3rd_floor_two._3rd_zombie_4 = new fps(_3rd_floor_two,"_3rd_zombie_4","3층좀비_4.png",130,randomLocationX(),randomLocationY())
+_3rd_floor_two._3rd_zombie_5 = new fps(_3rd_floor_two,"_3rd_zombie_5","3층좀비_5.png",140,randomLocationX(),randomLocationY())
+_3rd_floor_three._3rd_zombie_6 = new fps(_3rd_floor_three,"_3rd_zombie_6","3층좀비_1.png",150,randomLocationX(),randomLocationY())
+_3rd_floor_three._3rd_zombie_7 = new fps(_3rd_floor_three,"_3rd_zombie_7","3층좀비_2.png",150,randomLocationX(),randomLocationY())
+_3rd_floor_three._3rd_zombie_8 = new fps(_3rd_floor_three,"_3rd_zombie_8","3층좀비_3.png",150,randomLocationX(),randomLocationY())
+_3rd_floor_three._3rd_zombie_9 = new fps(_3rd_floor_three,"_3rd_zombie_9","3층좀비_4.png",150,randomLocationX(),randomLocationY())
+_3rd_floor_three._3rd_zombie_10 = new fps(_3rd_floor_three,"_3rd_zombie_10","3층좀비_5.png",150,randomLocationX(),randomLocationY())
+
+//포탈생성
+_3rd_floor_three.dark_portal = new obj(_3rd_floor_three,"dark_portal","dark_portal.png",400,550,400)
+_3rd_floor_three.dark_portal.obj.hide()
+
+_3rd_floor_two.brain = new obj(_3rd_floor_two,"brain","brain.png",500, 500, 400)
+_3rd_floor_two.brain.onClick = function(){
+game.printStory("제한시간안에 좀비들을 모두 사살하자\n 실패시 죽음")
+_3rd_floor_two.brain.obj.hide()
+game.setTimer(15,1,"[그들이...온다!]")
+_3rd_floor_two._3rd_zombie_1.obj.show()
+_3rd_floor_two._3rd_zombie_2.obj.show()
+_3rd_floor_two._3rd_zombie_3.obj.show()
+_3rd_floor_two._3rd_zombie_4.obj.show()
+_3rd_floor_two._3rd_zombie_5.obj.show()
+_3rd_floor_three._3rd_zombie_6.obj.show()
+_3rd_floor_three._3rd_zombie_7.obj.show()
+_3rd_floor_three._3rd_zombie_8.obj.show()
+_3rd_floor_three._3rd_zombie_9.obj.show()
+_3rd_floor_three._3rd_zombie_10.obj.show()
+}
+
+_3rd_floor_two.right_arrow = new arrow(_3rd_floor_two,"right_arrow",_3rd_floor_three)
+_3rd_floor_three.left_arrow = new arrow(_3rd_floor_three,"left_arrow",_3rd_floor_two)
 
 
 //=============================================================================================
@@ -370,6 +478,9 @@ var quest_list = {
     }
 }
 
-game.start(_1st_floor_one); // 게임시작
+
+
+game.start(_3rd_floor_one); // 게임시작
+printMessage('BOSO rnd 헬스장')
 
 
