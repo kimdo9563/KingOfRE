@@ -270,6 +270,7 @@ _elevator.button_3 = new empty_box(_elevator, "button_3", 80, 1040, 550, _elevat
 _elevator.button_4 = new empty_box(_elevator, "button_4", 80, 1040, 590, _elevator_button)
 _elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 580, 530, _1st_floor_three)
 _elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 685, 530, _2nd_floor_one)
+_elevator_button._3rd_floor = new empty_box(_elevator_button, "_3rd_floor", 60, 685, 480, _3rd_floor_one)
 
 //==========================================================================================
 /* Battle Field */
@@ -376,10 +377,7 @@ _3rd_floor_three.dark_portal.obj.show()
 
 _3rd_floor_one.health_door = new empty_box(_3rd_floor_one,"health_door",450,600,400,_3rd_floor_two) //문에 투명 공간
 _3rd_floor_one.health_door.obj.hide()
-//_3rd_floor_one.chain = _3rd_floor_one.createObject("chain","쇠사슬_1.png")
-//_3rd_floor_one.chain.setWidth(500)
-//_3rd_floor_one.locateObject(_3rd_floor_one.chain,650,400)
-//_3rd_floor_one.chain.obj.lock()
+
 _3rd_floor_one.chain = new obj(_3rd_floor_one,"chain","쇠사슬_1.png",500,650,400)
 _3rd_floor_one.muscle = new obj(_3rd_floor_one,"muscle","근육좀비_1.png",500,200,400)
 
@@ -480,7 +478,7 @@ var quest_list = {
 
 
 
-game.start(_3rd_floor_one); // 게임시작
-printMessage('BOSO rnd 헬스장')
+game.start(_1st_floor_one); // 게임시작
+
 
 
