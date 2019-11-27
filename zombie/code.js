@@ -120,9 +120,9 @@ quest.prototype.create = function() {
 }
 
 function battle(come_to_room, enemy){
-
+    _battle_field.button_exit.onClick = function() {_battle_field.zombie.obj.hide(); game.move(come_to_room)}
     _battle_field.zombie = new zombie(_battle_field, enemy.name, enemy.image, 200, 1000, 230, enemy.life, enemy.damage);
-    _battle_field.zombie.onClick = function() {printMessage("으어어어어....")};
+    _battle_field.enemy.onClick = function() {printMessage("으어어어어....")};
 
     game.move(_battle_field)
     /*
@@ -133,15 +133,6 @@ function battle(come_to_room, enemy){
         printMessage("무기를 들고 덤비자")
     }
     */
-}
-battle.attack = function() {
-    try {
-        var weapon = game.getHandItem();
-        _battle_field.zombie.hp -= weapon.damage;
-        player_life -= _battle_field.zombie.damage;
-    } catch(e) {
-        printMessage("무기를 들고 덤비자")
-    }
 }
 /*
 =====================
@@ -247,6 +238,7 @@ var room_list = new Array(
 //초기값
 var player_life = 100;
 var player_money = 500;
+var player_weapon;
 
 var Life = new life();  //플레이어 라이프 조작을 위한 객체 생성
 Life.create()
@@ -279,10 +271,20 @@ _elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 
 //==========================================================================================
 /* Battle Field */
 
-_battle_field.button_attack = new empty_box(_battle_field, "button_atk", 100, 380, 500)
+_battle_field.button_attack = new empty_box(_battle_field, "button_attack", 100, 380, 500)
 _battle_field.button_skill = new empty_box(_battle_field, "button_skill", 100, 380, 620)
+_battle_field.button_exit = new empty_box(_battle_field, "button_exit", 100, 1000, 620)
 
-//_battle_field.button_attack.onClick = function() {battle.attack}
+_battle_field.button_attack.onClick = function () {
+    try {
+        player_weapon = game.getHandItem();
+        _battle_field.zombie.hp -= weapon.damage;
+        player_life -= _battle_field.zombie.damage;
+    } catch(e) {
+        printMessage("무기를 들고 덤비자")
+    }
+
+}
 
 
 //==========================================================================================
