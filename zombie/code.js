@@ -292,15 +292,15 @@ _2nd_floor_one.test_item.onClick = function() { _2nd_floor_one.test_item.obj.pic
 //꼭 맨 뒤에 선언, 아이템 선언이 먼저 나오므로
 var quest_list = {
     1: {
-        "name": "quest1",
+        "name": "김혁민 탈주사건!\n\n",
         "object": _2nd_floor_one.test_item.obj,
-        "description": "test description",
+        "description": "이봐! 김혁민이가 또 탈출했어. 잡아주게",
         "flag": 0
     },
     2: {
-        "name": "quest2",
+        "name": "또 일어난 강간사건?\n\n",
         "object" : undefined,
-        "description": "test description",
+        "description": "그래! 김혁민이는 잘 잡아왔구만...\n"+"하지만 말야, 다른 문제가 생겼어..",
         "flag": 0
     }
 }
