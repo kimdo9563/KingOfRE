@@ -167,16 +167,15 @@ shopNPC.prototype.change_quest = function() {
     }
 }
 
-function zombie(room, name, image, width, x_loc, y_loc) {
+function zombie(room, name, image, width, x_loc, y_loc, hp, atk) {
     obj.call(this, room, name, image, width, x_loc, y_loc);
+    this.hp = hp;
+    this.atk = atk;
 }
 zombie.prototype = Object.create(obj.prototype)
 zombie.prototype.constructor = zombie;
 zombie.prototype.onClick = function() {
-    Life.change(-5)
-    Money.change(-10)
-    printMessage(player_life)
-    game.move(_2st_floor_one)
+    game.move(_battle_field)
 }
 
 
@@ -187,6 +186,8 @@ _elevator = game.createRoom("_elevator", "_elevator.png");
 _elevator_button = game.createRoom("_elevator_button", "_elevator_button.png")
 
 _shop_itemlist = game.createRoom("_shop_itemlist", "_shop_itemlist.png")
+
+_battle_field = game.createRoom("_battle_field", "_battle_field.png")
 
 _1st_floor_one = game.createRoom("_1st_floor_one", "background.png"); // 방 생성
 _1st_floor_two = game.createRoom("_1st_floor_two", "background.png");
@@ -226,6 +227,12 @@ _elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 
 _elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 685, 530, _2nd_floor_one)
 
 //==========================================================================================
+/* Battle Field */
+
+_battle_field.button_atk = new empty_box(_elevator, "button_1", 80, 1040, 420, _elevator_button)
+
+
+//==========================================================================================
 /* 1st floor */
 
 _1st_floor_one.right_arrow = new arrow(_1st_floor_one, "right_arrow", _1st_floor_two)
@@ -241,8 +248,8 @@ _1st_floor_three.elevator.onClick = function () { game.move(_elevator)}
 
 
 
-_1st_floor_one.zombie = new zombie(_1st_floor_one, "zombie", "zombie.png", 200, 1000, 500);
-_1st_floor_one.zombie.onClick = function() {printMessage(quest_list[1]["object"])}
+_1st_floor_one.zombie = new zombie(_1st_floor_one, "zombie", "zombie.png", 200, 1000, 500, 30, 2);
+
 
 
 
