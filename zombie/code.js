@@ -110,13 +110,12 @@ function quest(){};
     /*
     // Prototype Description
     create         :   UI에 퀘스트 생성
-    change         :   소지금 변경(eg.상점 이용, 플레어 사망 시)
     */
 quest.prototype.create = function() {
     for (var i = 0; i < room_list.length; i++){
             room = room_list[i];
             room.quest = new room_ui(room, "quest", "quest.png", 50, 250, 50);
-            room.quest.onClick = function() {printMessage("quest test")}
+            room.quest.onClick = function() {game.printStory(quest_message)}
     }
 }
 
@@ -126,6 +125,47 @@ quest.prototype.create = function() {
 |
 =====================
 */
+
+function shopNPC() {
+    this.create()
+    this.change_quest()
+}
+shopNPC.prototype.create = function() {
+    _2nd_floor_one.shopNPC = new obj(_2nd_floor_one, "shopNPC", "empty_box.png", 200, 300, 200)
+
+    _2nd_floor_one.shop_select_window = new obj(_2nd_floor_one, "shop_select_window", "shop_select_window.png", 1000, 640, 580)
+    _2nd_floor_one.shop_select_window.obj.hide()
+
+    _2nd_floor_one.shop_select_itemlist = new empty_box(_2nd_floor_one, "shop_select_itemlist", 100, 400, 540, _shop_itemlist)
+    _2nd_floor_one.shop_select_itemlist.obj.hide()
+
+    _2nd_floor_one.shop_select_quest = new empty_box(_2nd_floor_one, "shop_select_quest", 100, 400, 620)
+    _2nd_floor_one.shop_select_quest.obj.hide()
+
+    _2nd_floor_one.shopNPC.onClick = function() {
+        if(_2nd_floor_one.shopNPC.obj.isClosed()) {
+            _2nd_floor_one.shop_select_window.obj.show();
+            _2nd_floor_one.shop_select_itemlist.obj.show();
+            _2nd_floor_one.shop_select_quest.obj.show();
+            _2nd_floor_one.shopNPC.obj.open()}
+        else {
+            _2nd_floor_one.shop_select_window.obj.hide();
+            _2nd_floor_one.shop_select_itemlist.obj.hide();
+            _2nd_floor_one.shop_select_quest.obj.hide();
+            _2nd_floor_one.shopNPC.obj.close()}
+        }
+}
+shopNPC.prototype.change_quest = function() {
+    var quest_index = 1;
+    _2nd_floor_one.shop_select_quest.onClick = function() {
+        if(game.getHandItem() == quest_list[quest_index]["object"]) {
+            quest_list[quest_index]["flag"] = 1;
+            quest_index++;
+        }
+        quest_message = quest_list[quest_index]["name"]+"\n"+quest_list[quest_index]["description"]+"\n";
+        game.printStory(quest_message)
+    }
+}
 
 function zombie(room, name, image, width, x_loc, y_loc) {
     obj.call(this, room, name, image, width, x_loc, y_loc);
@@ -145,6 +185,8 @@ zombie.prototype.onClick = function() {
 
 _elevator = game.createRoom("_elevator", "_elevator.png");
 _elevator_button = game.createRoom("_elevator_button", "_elevator_button.png")
+
+_shop_itemlist = game.createRoom("_shop_itemlist", "_shop_itemlist.png")
 
 _1st_floor_one = game.createRoom("_1st_floor_one", "background.png"); // 방 생성
 _1st_floor_two = game.createRoom("_1st_floor_two", "background.png");
@@ -172,6 +214,7 @@ Money.create()
 var Quest = new quest();
 Quest.create()
 
+
 //==========================================================================================
 /* elevator */
 
@@ -196,13 +239,23 @@ _1st_floor_three.elevator.onClick = function () { game.move(_elevator)}
 
 
 _1st_floor_one.zombie = new zombie(_1st_floor_one, "zombie", "zombie.png", 200, 1000, 500);
-_1st_floor_one.zombie.onClick = function() { Life.change(-10)}
+_1st_floor_one.zombie.onClick = function() {printMessage(quest_list[1]["object"])}
+
 
 
 
 //=============================================================================================
-/* 2nd floor */
+/* 2nd floor OR NPC */
 
+_2nd_floor_one.elevator = new obj(_2nd_floor_one, "elevator", "_elevator.png", 100, 1200, 360)
+_2nd_floor_one.elevator.onClick = function () { game.move(_elevator)}
+
+Shop_NPC = new shopNPC();
+
+_shop_itemlist.exit_button = new empty_box(_shop_itemlist, "exit_button", 50, 1200, 680, _2nd_floor_one)
+
+_2nd_floor_one.test_item = new obj(_2nd_floor_one, "test_item", "empty_box.png", 100, 800, 300)
+_2nd_floor_one.test_item.onClick = function() { _2nd_floor_one.test_item.obj.pick()}
 
 
 //=============================================================================================
@@ -236,6 +289,22 @@ _1st_floor_one.zombie.onClick = function() { Life.change(-10)}
 
 
 //=============================================================================================
+//꼭 맨 뒤에 선언, 아이템 선언이 먼저 나오므로
+var quest_list = {
+    1: {
+        "name": "quest1",
+        "object": _2nd_floor_one.test_item.obj,
+        "description": "test description",
+        "flag": 0
+    },
+    2: {
+        "name": "quest2",
+        "object" : undefined,
+        "description": "test description",
+        "flag": 0
+    }
+}
+
 game.start(_1st_floor_one); // 게임시작
 
 
