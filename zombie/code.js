@@ -429,9 +429,15 @@ _3rd_floor_three._3rd_zombie_8.obj.show()
 _3rd_floor_three._3rd_zombie_9.obj.show()
 _3rd_floor_three._3rd_zombie_10.obj.show()
 }
-
 _3rd_floor_two.right_arrow = new arrow(_3rd_floor_two,"right_arrow",_3rd_floor_three)
 _3rd_floor_three.left_arrow = new arrow(_3rd_floor_three,"left_arrow",_3rd_floor_two)
+
+game.setGameoverMessage("좀비에게 물어뜯겼습니다..")
+
+_3rd_floor_three.dark_portal.onClick = function(){
+game.move(_boss_room_1)
+printMessage("좀비를 피해 문으로 나아가세요")
+}
 
 
 //=============================================================================================
@@ -450,9 +456,145 @@ _3rd_floor_three.left_arrow = new arrow(_3rd_floor_three,"left_arrow",_3rd_floor
 
 
 //=============================================================================================
-/* 7th floor */
+/* boss */
+function keypad(room, name, image, width, x_loc, y_loc) {
+    this.room = room;
+    this.name = name;
+    this.image = image;
+    this.width = width;
+    this.x_loc = x_loc;
+    this.y_loc = y_loc;
+
+    this.keypad = room.createObject(name, image);
+    this.keypad.setWidth(width);
+    room.locateObject(this.keypad, x_loc, y_loc);
+}
+keypad.prototype.onClick = function() {
+_boss_room_1.human.keypad.setSprite("생존자.png")
+//좀비 이동
+
+if(_boss_room_1.zombie1.keypad.getX()==100){
+_boss_room_1.zombie1.keypad.move = false}
+else if(_boss_room_1.zombie1.keypad.getX()==300){
+_boss_room_1.zombie1.keypad.moveX(100)
+}
+else{_boss_room_1.zombie1.keypad.moveX(-100)}
+
+//2번 좀비
+if(_boss_room_1.zombie2.keypad.getY()==100){
+_boss_room_1.zombie2.keypad.move = false
+}
+else{_boss_room_1.zombie2.keypad.moveY(-100)}
+
+//3번 좀비
+if(_boss_room_1.zombie3.keypad.getY()==600){
+_boss_room_1.zombie3.keypad.move = false
+}
+else if(_boss_room_1.zombie3.keypad.getY()==400){
+_boss_room_1.zombie3.keypad.moveY(-100)
+}
+else if(_boss_room_1.zombie3.keypad.getX()==600){
+_boss_room_1.zombie3.keypad.moveY(100)
+}
+else{_boss_room_1.zombie3.keypad.moveX(100)}
+
+//4번 좀비
+if(_boss_room_1.zombie4.keypad.getX()==1200){
+_boss_room_1.zombie4.keypad.move = false
+}
+else if(_boss_room_1.zombie4.keypad.getX()==800 && _boss_room_1.zombie4.keypad.getY()==200){
+_boss_room_1.zombie4.keypad.moveX(100)
+}
+else if(_boss_room_1.zombie4.keypad.getX()==800){
+_boss_room_1.zombie4.keypad.moveY(100)
+}
+else{_boss_room_1.zombie4.keypad.moveX(100)}
+
+//5번 좀비
+if(_boss_room_1.zombie5.keypad.getX()==100){
+_boss_room_1.zombie5.keypad.move = false
+}
+else{_boss_room_1.zombie5.keypad.moveX(-100)}
+
+//화살표 클릭
+ if(this.name == "left_arrow"){
+ if(_boss_room_1.human.keypad.getX()==100){
+printMessage("이동불가")
+    }
+else{_boss_room_1.human.keypad.moveX(-100)}
+    }
+ if(this.name=="right_arrow"){
+if(_boss_room_1.human.keypad.getX()==1200){
+printMessage("이동불가")
+ }
+else{_boss_room_1.human.keypad.moveX(100)}
+    }
+ if(this.name=="up_arrow"){
+ if(_boss_room_1.human.keypad.getY()==100){
+printMessage("이동불가")
+    }
+else{_boss_room_1.human.keypad.moveY(-100)}
+    }
+
+ if(this.name=="down_arrow"){
+ if(_boss_room_1.human.keypad.getY()==600){
+printMessage("이동불가")}
+else{_boss_room_1.human.keypad.moveY(100)}
+    }
+
+ if(_boss_room_1.human.keypad.getX()==_boss_room_1.zombie1.keypad.getX() && _boss_room_1.human.keypad.getY()==_boss_room_1.zombie1.keypad.getY()){
+printMessage("Game Over")
+_boss_room_1.human.keypad.setSprite("blood.png")
+    }
+ if(_boss_room_1.human.keypad.getX()==_boss_room_1.zombie2.keypad.getX() && _boss_room_1.human.keypad.getY()==_boss_room_1.zombie2.keypad.getY()){
+printMessage("Game Over")
+_boss_room_1.human.keypad.setSprite("blood.png")
+    }
+ if(_boss_room_1.human.keypad.getX()==_boss_room_1.zombie3.keypad.getX() && _boss_room_1.human.keypad.getY()==_boss_room_1.zombie3.keypad.getY()){
+printMessage("Game Over")
+_boss_room_1.human.keypad.setSprite("blood.png")
+    }
+if(_boss_room_1.human.keypad.getX()==_boss_room_1.zombie4.keypad.getX() && _boss_room_1.human.keypad.getY()==_boss_room_1.zombie4.keypad.getY()){
+printMessage("Game Over")
+_boss_room_1.human.keypad.setSprite("blood.png")
+    }
+if(_boss_room_1.human.keypad.getX()==_boss_room_1.zombie5.keypad.getX() && _boss_room_1.human.arrow.getY()==_boss_room_1.zombie5.arrow.getY()){
+printMessage("Game Over")
+_boss_room_1.human.keypad.setSprite("blood.png")
+    }
+if(_boss_room_1.human.keypad.getX()==1200 && _boss_room_1.human.keypad.getY()==300){
+game.move(_boss_room_2)
+printMessage("보스방이다")
+    }
+
+}
+
+_boss_room_1 = game.createRoom("_boss_room_1", "dark_background.jpg"); // 방 생성
+_boss_room_2 = game.createRoom("_boss_room_2","보스방2.jpg")
+_boss_room_3 = game.createRoom("boss_room_3","background.png")
+_boss_room_1.human = new keypad(_boss_room_1,"human","생존자.png",80,100,600)
+
+_boss_room_1.zombie1 = new keypad(_boss_room_1,"zombie1","zombie.png",80,500,500)
+_boss_room_1.zombie2 = new keypad(_boss_room_1,"zombie2","3층좀비_3.png",70,800,600)
+_boss_room_1.zombie3 = new keypad(_boss_room_1,"zombie3","3층좀비_6.png",70,300,200)
+_boss_room_1.zombie4 = new keypad(_boss_room_1,"zombie4","3층좀비_5.png",70,400,100)
+_boss_room_1.zombie5 = new keypad(_boss_room_1,"zombie5","3층좀비_4.png",70,1100,600)
+_boss_room_1.gate = new keypad(_boss_room_1,"gate","보스방2.jpg",100,1200,300)
 
 
+_boss_room_1.left_arrow = new keypad(_boss_room_1,"left_arrow","left_arrow.png",100,900,600)
+_boss_room_1.right_arrow = new keypad(_boss_room_1,"right_arrow","right_arrow.png",100,1100,600)
+_boss_room_1.up_arrow = new keypad(_boss_room_1,"up_arrow","up_arrow.png",85,1000,500)
+_boss_room_1.down_arrow = new keypad(_boss_room_1,"down_arrow","down_arrow.png",85,1000,650)
+
+_boss_room_2.enter = new keypad(_boss_room_2,"enter","up_arrow.png",60,650,500)
+
+_boss_room_3.boss = new keypad(_boss_room_3,"boss","근육좀비_1.png",400,600,400)
+
+
+_boss_room_2.enter.onClick= function(){
+game.move(_boss_room_3)
+}
 
 //=============================================================================================
 /* roof_top */
