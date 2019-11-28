@@ -224,9 +224,16 @@ _1st_floor_two = game.createRoom("_1st_floor_two", "background.png");
 _1st_floor_three = game.createRoom("_1st_floor_three", "background.png");
 
 _2nd_floor_one = game.createRoom("_2nd_floor_one", "_2nd_floor_one.png");
+
 _3rd_floor_one = game.createRoom("_3rd_floor_one","지옥문_1.png")
 _3rd_floor_two = game.createRoom("_3rd_floor_two","헬스장_1.jpg")
 _3rd_floor_three = game.createRoom("_3rd_floor_three","헬스장_2.jpg")
+
+_4th_floor_one = game.createRoom("_4th_floor_one", "4층_복도.jpg")
+_4th_floor_two = game.createRoom("_4th_floor_two", "4층_회의실.jpg")
+
+_roof_top_one = game.createRoom("_roof_top_one", "헬기장.jpg")
+_roof_top_two = game.createRoom("_roof_top_two", "_elevator_room.jpg")
 
 // 라이프와, 소지금이 보이길 원하는 방을 생성하면, room_list 배열에 동기화 필수!
 var room_list = new Array(
@@ -236,7 +243,11 @@ var room_list = new Array(
     _1st_floor_three,
     _2nd_floor_one,
     _elevator,
-    _3rd_floor_one);
+    _3rd_floor_one,
+    _4th_floor_one,
+    _4th_floor_two,
+    _roof_top_one,
+    _roof_top_two);
 
 //초기값
 var player_life = 100;
@@ -271,6 +282,8 @@ _elevator.button_4 = new empty_box(_elevator, "button_4", 80, 1040, 590, _elevat
 _elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 580, 530, _1st_floor_three)
 _elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 685, 530, _2nd_floor_one)
 _elevator_button._3rd_floor = new empty_box(_elevator_button, "_3rd_floor", 60, 685, 480, _3rd_floor_one)
+_elevator_button._4th_floor = new empty_box(_elevator_button, "_4th_floor", 60, 580, 480, _4th_floor_one)
+_elevator_button._roof_top = new empty_box(_elevator_button, "_roof_top", 60, 580, 380, _roof_top_one)
 
 //==========================================================================================
 /* Battle Field */
@@ -300,7 +313,6 @@ _1st_floor_two.left_arrow = new arrow(_1st_floor_two, "left_arrow", _1st_floor_o
 _1st_floor_two.right_arrow = new arrow(_1st_floor_two, "right_arrow", _1st_floor_three)
 
 _1st_floor_three.left_arrow = new arrow(_1st_floor_three, "left_arrow", _1st_floor_two)
-
 
 _1st_floor_three.elevator = new obj(_1st_floor_three, "elevator", "_elevator.png", 100, 800, 360)
 _1st_floor_three.elevator.onClick = function () { game.move(_elevator)}
@@ -435,9 +447,40 @@ _3rd_floor_three.left_arrow = new arrow(_3rd_floor_three,"left_arrow",_3rd_floor
 
 
 //=============================================================================================
-/* 4th floor */
+/* 4th floor */ // 회의실에서 
+_4th_floor_one.right_arrow = new arrow(_4th_floor_one, "right_arrow", _4th_floor_two)
+_4th_floor_one.left_arrow = new arrow(_4th_floor_one, "left_arrow", _4th_floor_two)
+_4th_floor_two.left_arrow = new arrow(_4th_floor_two, "left_arrow", _4th_floor_one)
 
 
+
+
+// ************************ 슬롯머신*************************
+// if문으로 할 번 돌릴 때 필요한 돈 정해야 함.
+_4th_floor_two.slot_machine_game = new obj(_4th_floor_two, "slot_machine_game", "슬롯머신_게임.png", 800, 640, 360)
+_4th_floor_two.slot_machine_game.obj.hide()
+
+_4th_floor_two.slot_machine = new obj(_4th_floor_two, "slot_machine", "슬롯머신_외관.png", 350, 1000, 500)
+_4th_floor_two.slot_machine.onClick = function() { _4th_floor_two.slot_machine_game.obj.show()} 
+
+var slotArray = new Array(0, 0, 0)
+_4th_floor_two.slot_machine_game.onClick = function(){
+    if(player_money > 100){
+        slotArray[0] = Math.floor(Math.random()*10)
+        slotArray[1] = Math.floor(Math.random()*10)
+        slotArray[2] = Math.floor(Math.random()*10)
+        printMessage(slotArray[0]+" "+slotArray[1]+" "+slotArray[2])
+            if(slotArray[0]===7 && slotArray[1]===7 && slotArray[2]===7){
+                player_money += 10000
+            } // 잭팟
+        player_money-=90
+    } else {
+        printMessage("소지금이 부족합니다.")
+    }
+
+    _4th_floor_two.slot_machine_game.obj.hide()
+}
+// ***************************슬롯머신*************************
 
 //=============================================================================================
 /* 5th floor */
@@ -455,8 +498,16 @@ _3rd_floor_three.left_arrow = new arrow(_3rd_floor_three,"left_arrow",_3rd_floor
 
 
 //=============================================================================================
-/* roof_top */
+/* roof_top */ // 신호를 주면 헬리콥터 show. 헬리콥터 onClick 탈출 성공
+_roof_top_one.left_arrow = new arrow(_roof_top_one, "left_arrow", _roof_top_two)
+_roof_top_two.right_arrow = new arrow(_roof_top_two, "right_arrow", _roof_top_one)
+_roof_top_two.elevator = new obj(_roof_top_two, "elevator", "_elevator.png", 100, 800, 360)
+_roof_top_two.elevator.onClick = function () { game.move(_elevator)}
 
+    // 헬리콥터 호출하는 설정 정해야 함
+_roof_top_one.helicopter = new obj(_roof_top_one, "helicopter", "helicopter.png", 300, 720, 360)
+_roof_top_one.helicopter.obj.hide()
+_roof_top_one.helicopter.onClick = function(){ game.clear()}
 
 
 //=============================================================================================
@@ -478,7 +529,7 @@ var quest_list = {
 
 
 
-game.start(_1st_floor_one); // 게임시작
+game.start(_4th_floor_one); // 게임시작
 
 
 
