@@ -192,8 +192,8 @@ shopNPC.prototype.change_quest = function() {
     }
 }
 
-function weapon(room, name, image, x_loc, y_loc, damage, skill_name, skill_damage, cost) {
-    obj.call(this, room, name, image, 80, x_loc, y_loc);
+function weapon(room, name, image, width, x_loc, y_loc, damage, skill_name, skill_damage, cost) {
+    obj.call(this, room, name, image, width, x_loc, y_loc);
     this.damage = damage;
     this.skill_name = skill_name;
     this.skill_damage = skill_damage;
@@ -201,13 +201,21 @@ function weapon(room, name, image, x_loc, y_loc, damage, skill_name, skill_damag
 }
 weapon.prototype = Object.create(obj.prototype)
 weapon.prototype.constructor = weapon;
+/*(weapon.prototype.onClick = function(){
+	game.createObject
+	blue_screen.show();
+}
+*/
 weapon.prototype.onClick = function () {
     if(player_money > this.cost) { this.obj.pick(); Money.change(0-this.cost) }
     else{printMessage("돈이 부족하다 !!")}
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> master
 function zombie(room, name, image, width, x_loc, y_loc, life, damage) {
     obj.call(this, room, name, image, width, x_loc, y_loc);
     this.name = name;
@@ -277,12 +285,21 @@ var Quest = new quest();
 Quest.create()
 
 // weapon initialize
+<<<<<<< HEAD
 // room, name, image, x_loc, y_loc, damage, skill_name, skill_damage, cost
 _1st_floor_two.weapon_branch = new weapon(_1st_floor_two, "weapon_branch", "weapon_branch.png", 600, 600, 5, "엄마의 회초리", 1, 0)
 _shop_itemlist.weapon_axe = new weapon(_shop_itemlist, "weapon_axe", "weapon_axe.png", 500, 250, 10, "춤추는 회전도끼", 15, 50)
 _shop_itemlist.weapon_chainsaw = new weapon(_shop_itemlist, "weapon_chainsaw", "weapon_chainsaw.png", 580, 250, 15, "텍사스의 추억", 30, 200)
 _shop_itemlist.weapon_lightsaber = new weapon(_shop_itemlist, "weapon_lightsaber", "weapon_lightsaber.png", 660, 250, 20, "일격필살", 40, 400)
 _shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "weapon_railgun.png", 740, 250, 25, "정조준 일격", 9999, 1000)
+=======
+// room, name, image, x_loc, y_loc, damage, skill_name, skill_damage
+_1st_floor_two.weapon_branch = new weapon(_1st_floor_two, "weapon_branch", "weapon_branch.png", 50, 600, 600, 5, "엄마의 회초리", 1, 0)
+_shop_itemlist.weapon_axe = new weapon(_shop_itemlist, "weapon_axe", "weapon_axe.png", 90, 90, 190, 10, "춤추는 회전도끼", 15, 50)
+_shop_itemlist.weapon_chainsaw = new weapon(_shop_itemlist, "weapon_chainsaw", "weapon_chainsaw.png", 100, 230, 190, 15, "텍사스의 추억", 30, 200)
+_shop_itemlist.weapon_lightsaber = new weapon(_shop_itemlist, "weapon_lightsaber", "weapon_lightsaber.png", 140, 370, 190, 20, "일격필살", 40, 400)
+_shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "weapon_railgun.png", 100, 510, 190, 25, "정조준 일격", 9999, 1000)
+>>>>>>> master
 
 
 
@@ -341,7 +358,7 @@ _1st_floor_two.right_arrow = new arrow(_1st_floor_two, "right_arrow", _1st_floor
 _1st_floor_three.left_arrow = new arrow(_1st_floor_three, "left_arrow", _1st_floor_two)
 
 _1st_floor_three.elevator = new obj(_1st_floor_three, "elevator", "_elevator.png", 100, 800, 360)
-_1st_floor_three.elevator.onClick = function () { game.move(_elevator)}
+_1st_floor_three.elevator.onClick = function () { game.move(_elevator) }
 
 
 
@@ -353,15 +370,15 @@ _1st_floor_one.zombie2 = new zombie(_1st_floor_one, "zombie2", "3층좀비_1.png
 //=============================================================================================
 /* 2nd floor OR NPC */
 
-_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator)
+//_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator)
 
 Shop_NPC = new shopNPC();
 
-_shop_itemlist.exit_button = new empty_box(_shop_itemlist, "exit_button", 50, 1200, 680, _2nd_floor_one)
+_shop_itemlist.exit_button = new obj(_shop_itemlist, "exit_button", "button_exit.png", 100, 1200, 680)
+_shop_itemlist.exit_button.onClick = function(){ game.move( _2nd_floor_one) }
 
-_2nd_floor_one.test_item = new obj(_2nd_floor_one, "test_item", "empty_box.png", 100, 800, 300)
-_2nd_floor_one.test_item.onClick = function() { _2nd_floor_one.test_item.obj.pick()}
-
+/*_2nd_floor_one.test_item = new obj(_2nd_floor_one, "test_item", "empty_box.png", 100, 800, 300)
+_2nd_floor_one.test_item.onClick = function() { _2nd_floor_one.test_item.obj.pick()}*/
 
 //=============================================================================================
 /* 3rd floor */
@@ -678,7 +695,7 @@ _roof_top_one.helicopter.onClick = function(){ game.clear()}
 
 //=============================================================================================
 //꼭 맨 뒤에 선언, 아이템 선언이 먼저 나오므로
-var quest_list = {
+/*var quest_list = {
     1: {
         "name": "김혁민 탈주사건!\n\n",
         "object": _2nd_floor_one.test_item.obj,
@@ -691,7 +708,7 @@ var quest_list = {
         "description": "그래! 김혁민이는 잘 잡아왔구만...\n"+"하지만 말야, 다른 문제가 생겼어..",
         "flag": 0
     }
-}
+}*/
 
 
 
