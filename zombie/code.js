@@ -107,7 +107,16 @@ money.prototype.change = function(change_money_amount) {
         var changed_money = player_money + change_money_amount;
         player_money = changed_money;
 }
-
+function player_control() {
+    this.damage;
+}
+player_control.prototype.weapon = function() {
+    if (game.getHandItem()==_1st_floor_two.weapon_branch.obj) { this.damage = _1st_floor_two.weapon_branch.damage }
+    if (game.getHandItem() == _shop_itemlist.weapon_axe.obj) {this.damage = _shop_itemlist.weapon_axe.damage}
+    if (game.getHandItem() == _shop_itemlist.weapon_chainsaw.obj) {this.damage = _shop_itemlist.weapon_chainsaw.damage}
+    if (game.getHandItem() == _shop_itemlist.weapon_lightsaber.obj) {this.damage = _shop_itemlist.weapon_lightsaber.damage}
+    if (game.getHandItem() == _shop_itemlist.weapon_railgun.obj) {this.damage = _shop_itemlist.weapon_railgun.damage}
+}
 function quest(){};
     /*
     // Prototype Description
@@ -125,7 +134,7 @@ function battle(come_to_room, enemy){
     _battle_field.button_exit.onClick = function() {game.move(come_to_room)}
 
     _battle_field.zombie.obj.setSprite(enemy.image)
-    _battle_field.zombie.life = enemy.life;
+    _battle_field.zombie.life = 30;
     _battle_field.zombie.damage = enemy.damage;
 
     _battle_field.zombie.onClick = function() { printMessage("test") }
@@ -133,14 +142,7 @@ function battle(come_to_room, enemy){
     game.move(_battle_field)
 
     //room, name, image, width, x_loc, y_loc, life, damage
-    /*
-    try {
-        var weapon = game.getHandItem();
 
-    } catch(e) {
-        printMessage("무기를 들고 덤비자")
-    }
-    */
 }
 /*
 =====================
@@ -205,6 +207,7 @@ weapon.prototype.onClick = function () {
 }
 
 
+
 function zombie(room, name, image, width, x_loc, y_loc, life, damage) {
     obj.call(this, room, name, image, width, x_loc, y_loc);
     this.name = name;
@@ -255,7 +258,6 @@ var room_list = new Array(
     _1st_floor_two,
     _1st_floor_three,
     _2nd_floor_one,
-    _elevator,
     _3rd_floor_one,
     _4th_floor_one,
     _4th_floor_two,
@@ -265,7 +267,7 @@ var room_list = new Array(
 //초기값
 var player_life = 100;
 var player_money = 500;
-var player_weapon;
+var Player = new player_control;
 
 var Life = new life();  //플레이어 라이프 조작을 위한 객체 생성
 Life.create()
@@ -275,7 +277,7 @@ var Quest = new quest();
 Quest.create()
 
 // weapon initialize
-// room, name, image, x_loc, y_loc, damage, skill_name, skill_damage
+// room, name, image, x_loc, y_loc, damage, skill_name, skill_damage, cost
 _1st_floor_two.weapon_branch = new weapon(_1st_floor_two, "weapon_branch", "weapon_branch.png", 600, 600, 5, "엄마의 회초리", 1, 0)
 _shop_itemlist.weapon_axe = new weapon(_shop_itemlist, "weapon_axe", "weapon_axe.png", 500, 250, 10, "춤추는 회전도끼", 15, 50)
 _shop_itemlist.weapon_chainsaw = new weapon(_shop_itemlist, "weapon_chainsaw", "weapon_chainsaw.png", 580, 250, 15, "텍사스의 추억", 30, 200)
@@ -308,9 +310,17 @@ _battle_field.button_exit = new empty_box(_battle_field, "button_exit", 100, 100
 _battle_field.button_attack.onClick = function () {
 
     try {
-        player_weapon = game.getHandItem();
-        _battle_field.zombie.hp -= player_weapon.damage;
-        player_life -= _battle_field.zombie.damage;
+        Player.weapon();
+
+        _battle_field.zombie.life -= Player.damage;
+        if(_battle_field.zombie.life <= 0) {
+            printMessage("좀비를 무찔렀다!")
+            _battle_field.button_exit.onClick
+        }
+        Life.change(0-_battle_field.zombie.damage);
+
+        //printMessage(_battle_field.zombie.life)
+
     } catch(e) {
         printMessage("무기를 들고 덤비자")
     }
@@ -337,6 +347,8 @@ _1st_floor_three.elevator.onClick = function () { game.move(_elevator)}
 
 _1st_floor_one.zombie = new zombie(_1st_floor_one, "zombie", "zombie.png", 200, 1000, 500, 30, 2);
 
+
+_1st_floor_one.zombie2 = new zombie(_1st_floor_one, "zombie2", "3층좀비_1.png", 200, 200, 500, 100, 20);
 
 //=============================================================================================
 /* 2nd floor OR NPC */
