@@ -47,7 +47,7 @@ empty_box.prototype.constructor = empty_box;
 empty_box.prototype.onClick = function () {game.move(this.go_to_room)}
 /*
 ============================
-|    플레이어 스탯 관련 Func
+|    플레이어 관련 Func
 |
 ============================
 */
@@ -119,6 +119,21 @@ quest.prototype.create = function() {
     }
 }
 
+function battle(come_to_room, enemy){
+    _battle_field.button_exit.onClick = function() {_battle_field.zombie.obj.hide(); game.move(come_to_room)}
+    _battle_field.zombie = new zombie(_battle_field, enemy.name, enemy.image, 200, 1000, 230, enemy.life, enemy.damage);
+    _battle_field.enemy.onClick = function() {printMessage("으어어어어....")};
+
+    game.move(_battle_field)
+    /*
+    try {
+        var weapon = game.getHandItem();
+
+    } catch(e) {
+        printMessage("무기를 들고 덤비자")
+    }
+    */
+}
 /*
 =====================
 |    객체 관련 Func
@@ -167,16 +182,30 @@ shopNPC.prototype.change_quest = function() {
     }
 }
 
-function zombie(room, name, image, width, x_loc, y_loc) {
+function weapon(room, name, image, x_loc, y_loc, damage, skill_name, skill_damage, cost) {
+    obj.call(this, room, name, image, 80, x_loc, y_loc);
+    this.damage = damage;
+    this.skill_name = skill_name;
+    this.skill_damage = skill_damage;
+    this.cost = cost;
+}
+weapon.prototype = Object.create(obj.prototype)
+weapon.prototype.constructor = weapon;
+weapon.prototype.onClick = function () {
+    if(player_money > this.cost) { this.obj.pick(); Money.change(0-this.cost) }
+    else{printMessage("돈이 부족하다 !!")}
+}
+
+
+function zombie(room, name, image, width, x_loc, y_loc, life, damage) {
     obj.call(this, room, name, image, width, x_loc, y_loc);
+    this.life = life;
+    this.damage = damage;
 }
 zombie.prototype = Object.create(obj.prototype)
 zombie.prototype.constructor = zombie;
 zombie.prototype.onClick = function() {
-    Life.change(-5)
-    Money.change(-10)
-    printMessage(player_life)
-    game.move(_2st_floor_one)
+    battle(this.room, this)
 }
 
 
@@ -187,6 +216,8 @@ _elevator = game.createRoom("_elevator", "_elevator.png");
 _elevator_button = game.createRoom("_elevator_button", "_elevator_button.png")
 
 _shop_itemlist = game.createRoom("_shop_itemlist", "_shop_itemlist.png")
+
+_battle_field = game.createRoom("_battle_field", "_battle_field.png")
 
 _1st_floor_one = game.createRoom("_1st_floor_one", "background.png"); // 방 생성
 _1st_floor_two = game.createRoom("_1st_floor_two", "background.png");
@@ -199,6 +230,7 @@ _3rd_floor_three = game.createRoom("_3rd_floor_three","헬스장_2.jpg")
 
 // 라이프와, 소지금이 보이길 원하는 방을 생성하면, room_list 배열에 동기화 필수!
 var room_list = new Array(
+    _battle_field,
     _1st_floor_one,
     _1st_floor_two,
     _1st_floor_three,
@@ -209,6 +241,7 @@ var room_list = new Array(
 //초기값
 var player_life = 100;
 var player_money = 500;
+var player_weapon;
 
 var Life = new life();  //플레이어 라이프 조작을 위한 객체 생성
 Life.create()
@@ -217,12 +250,46 @@ Money.create()
 var Quest = new quest();
 Quest.create()
 
+// weapon initialize
+// room, name, image, x_loc, y_loc, damage, skill_name, skill_damage
+_1st_floor_two.weapon_branch = new weapon(_1st_floor_two, "weapon_branch", "weapon_branch.png", 600, 600, 5, "엄마의 회초리", 1, 0)
+_shop_itemlist.weapon_axe = new weapon(_shop_itemlist, "weapon_axe", "weapon_axe.png", 500, 250, 10, "춤추는 회전도끼", 15, 50)
+_shop_itemlist.weapon_chainsaw = new weapon(_shop_itemlist, "weapon_chainsaw", "weapon_chainsaw.png", 580, 250, 15, "텍사스의 추억", 30, 200)
+_shop_itemlist.weapon_lightsaber = new weapon(_shop_itemlist, "weapon_lightsaber", "weapon_lightsaber.png", 660, 250, 20, "일격필살", 40, 400)
+_shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "weapon_railgun.png", 740, 250, 25, "정조준 일격", 9999, 1000)
+
+
+
+
 //==========================================================================================
 /* elevator */
 
-_elevator.button = new empty_box(_elevator, "button", 80, 1100, 330, _elevator_button)
-_elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 550, 500, _1st_floor_three)
-_elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 700, 500, _2nd_floor_one)
+_elevator.button_1 = new empty_box(_elevator, "button_1", 80, 1040, 420, _elevator_button)
+_elevator.button_2 = new empty_box(_elevator, "button_2", 80, 1040, 485, _elevator_button)
+_elevator.button_3 = new empty_box(_elevator, "button_3", 80, 1040, 550, _elevator_button)
+_elevator.button_4 = new empty_box(_elevator, "button_4", 80, 1040, 590, _elevator_button)
+_elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 580, 530, _1st_floor_three)
+_elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 685, 530, _2nd_floor_one)
+_elevator_button._3rd_floor = new empty_box(_elevator_button, "_3rd_floor", 60, 685, 480, _3rd_floor_one)
+
+//==========================================================================================
+/* Battle Field */
+
+_battle_field.button_attack = new empty_box(_battle_field, "button_attack", 100, 380, 500)
+_battle_field.button_skill = new empty_box(_battle_field, "button_skill", 100, 380, 620)
+_battle_field.button_exit = new empty_box(_battle_field, "button_exit", 100, 1000, 620)
+
+_battle_field.button_attack.onClick = function () {
+    try {
+        player_weapon = game.getHandItem();
+        _battle_field.zombie.hp -= weapon.damage;
+        player_life -= _battle_field.zombie.damage;
+    } catch(e) {
+        printMessage("무기를 들고 덤비자")
+    }
+
+}
+
 
 //==========================================================================================
 /* 1st floor */
@@ -240,8 +307,8 @@ _1st_floor_three.elevator.onClick = function () { game.move(_elevator)}
 
 
 
-_1st_floor_one.zombie = new zombie(_1st_floor_one, "zombie", "zombie.png", 200, 1000, 500);
-_1st_floor_one.zombie.onClick = function() {printMessage(quest_list[1]["object"])}
+_1st_floor_one.zombie = new zombie(_1st_floor_one, "zombie", "zombie.png", 200, 1000, 500, 30, 2);
+
 
 
 
@@ -310,10 +377,7 @@ _3rd_floor_three.dark_portal.obj.show()
 
 _3rd_floor_one.health_door = new empty_box(_3rd_floor_one,"health_door",450,600,400,_3rd_floor_two) //문에 투명 공간
 _3rd_floor_one.health_door.obj.hide()
-//_3rd_floor_one.chain = _3rd_floor_one.createObject("chain","쇠사슬_1.png")
-//_3rd_floor_one.chain.setWidth(500)
-//_3rd_floor_one.locateObject(_3rd_floor_one.chain,650,400)
-//_3rd_floor_one.chain.obj.lock()
+
 _3rd_floor_one.chain = new obj(_3rd_floor_one,"chain","쇠사슬_1.png",500,650,400)
 _3rd_floor_one.muscle = new obj(_3rd_floor_one,"muscle","근육좀비_1.png",500,200,400)
 
@@ -414,7 +478,7 @@ var quest_list = {
 
 
 
-game.start(_3rd_floor_one); // 게임시작
-printMessage('BOSO rnd 헬스장')
+game.start(_1st_floor_one); // 게임시작
+
 
 
