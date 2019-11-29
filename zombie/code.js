@@ -30,6 +30,8 @@ function arrow(room, name, go_to_room) {
         room_ui.call(this, room, name, "left_arrow.png", 150, 100, 360)
     } else if (name == "right_arrow") {
         room_ui.call(this, room, name, "right_arrow.png", 150, 1200, 360)
+    } else if (name == "down_arrow") {
+        room_ui.call(this, room, name, "down_arrow.png", 200, 640, 650)
     }
 
     this.go_to_room = go_to_room;
@@ -120,11 +122,17 @@ quest.prototype.create = function() {
 }
 
 function battle(come_to_room, enemy){
-    _battle_field.button_exit.onClick = function() {_battle_field.zombie.obj.hide(); game.move(come_to_room)}
-    _battle_field.zombie = new zombie(_battle_field, enemy.name, enemy.image, 200, 1000, 230, enemy.life, enemy.damage);
-    _battle_field.enemy.onClick = function() {printMessage("으어어어어....")};
+    _battle_field.button_exit.onClick = function() {game.move(come_to_room)}
+
+    _battle_field.zombie.obj.setSprite(enemy.image)
+    _battle_field.zombie.life = enemy.life;
+    _battle_field.zombie.damage = enemy.damage;
+
+    _battle_field.zombie.onClick = function() { printMessage("test") }
 
     game.move(_battle_field)
+
+    //room, name, image, width, x_loc, y_loc, life, damage
     /*
     try {
         var weapon = game.getHandItem();
@@ -146,7 +154,7 @@ function shopNPC() {
     this.change_quest()
 }
 shopNPC.prototype.create = function() {
-    _2nd_floor_one.shopNPC = new obj(_2nd_floor_one, "shopNPC", "empty_box.png", 200, 300, 200)
+    _2nd_floor_one.shopNPC = new obj(_2nd_floor_one, "shopNPC", "_shop_npc.png", 300, 880, 235)
 
     _2nd_floor_one.shop_select_window = new obj(_2nd_floor_one, "shop_select_window", "shop_select_window.png", 1000, 640, 580)
     _2nd_floor_one.shop_select_window.obj.hide()
@@ -199,6 +207,11 @@ weapon.prototype.onClick = function () {
 
 function zombie(room, name, image, width, x_loc, y_loc, life, damage) {
     obj.call(this, room, name, image, width, x_loc, y_loc);
+    this.name = name;
+    this.image = image;
+    this.width = width;
+    this.x_loc = x_loc;
+    this.y_loc = y_loc;
     this.life = life;
     this.damage = damage;
 }
@@ -293,15 +306,18 @@ _battle_field.button_skill = new empty_box(_battle_field, "button_skill", 100, 3
 _battle_field.button_exit = new empty_box(_battle_field, "button_exit", 100, 1000, 620)
 
 _battle_field.button_attack.onClick = function () {
+
     try {
         player_weapon = game.getHandItem();
-        _battle_field.zombie.hp -= weapon.damage;
+        _battle_field.zombie.hp -= player_weapon.damage;
         player_life -= _battle_field.zombie.damage;
     } catch(e) {
         printMessage("무기를 들고 덤비자")
     }
 
 }
+
+_battle_field.zombie = new zombie(_battle_field, "_battle_field.zombie","empty_box.png", 100, 1000, 200, 0, 0);
 
 
 //==========================================================================================
@@ -322,14 +338,10 @@ _1st_floor_three.elevator.onClick = function () { game.move(_elevator)}
 _1st_floor_one.zombie = new zombie(_1st_floor_one, "zombie", "zombie.png", 200, 1000, 500, 30, 2);
 
 
-
-
-
 //=============================================================================================
 /* 2nd floor OR NPC */
 
-_2nd_floor_one.elevator = new obj(_2nd_floor_one, "elevator", "_elevator.png", 100, 1200, 360)
-_2nd_floor_one.elevator.onClick = function () { game.move(_elevator)}
+_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator)
 
 Shop_NPC = new shopNPC();
 
@@ -374,17 +386,17 @@ function fps(room, name, image, width, x_loc, y_loc) {
 
 }
 fps.prototype.onClick = function(){
-if(this.obj.isLocked()){
-countUp += 1
-}
-this.obj.unlock()
-this.obj.setSprite("blood.png")
+    if(this.obj.isLocked()){
+        countUp += 1
+    }
+    this.obj.unlock()
+    this.obj.setSprite("blood.png")
 
-if(countUp > 9){
-game.hideTimer()
-printMessage("공습에서 살아남으셨습니다")
-_3rd_floor_three.dark_portal.obj.show()
-}
+    if(countUp > 9){
+        game.hideTimer()
+        printMessage("공습에서 살아남으셨습니다")
+        _3rd_floor_three.dark_portal.obj.show()
+    }
 }
 
 _3rd_floor_one.health_door = new empty_box(_3rd_floor_one,"health_door",450,600,400,_3rd_floor_two) //문에 투명 공간
@@ -397,7 +409,7 @@ _3rd_floor_one.chain.obj.lock()
 
 
 //onClick 재정의
-_3rd_floor_one.muscle.onClick = function() { printMessage("넌 못지나간다!")
+_3rd_floor_one.muscle.onClick = function() { printMessage("넌 못지나간다!");
  game.printStory("약력\n스쿼트: 250kg\n벤치프레스: 400kg\n 데드리프트: 500kg\n 턱걸이: 80회\n 팔굽혀펴기: 100회")}
 
 _3rd_floor_one.chain.onClick = function(){
@@ -529,7 +541,7 @@ var quest_list = {
 
 
 
-game.start(_4th_floor_one); // 게임시작
+game.start(_1st_floor_one); // 게임시작
 
 
 
