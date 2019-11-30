@@ -211,11 +211,7 @@ weapon.prototype.onClick = function () {
     else{printMessage("돈이 부족하다 !!")}
 }
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> master
 function zombie(room, name, image, width, x_loc, y_loc, life, damage) {
     obj.call(this, room, name, image, width, x_loc, y_loc);
     this.name = name;
@@ -285,21 +281,15 @@ var Quest = new quest();
 Quest.create()
 
 // weapon initialize
-<<<<<<< HEAD
-// room, name, image, x_loc, y_loc, damage, skill_name, skill_damage, cost
-_1st_floor_two.weapon_branch = new weapon(_1st_floor_two, "weapon_branch", "weapon_branch.png", 600, 600, 5, "엄마의 회초리", 1, 0)
-_shop_itemlist.weapon_axe = new weapon(_shop_itemlist, "weapon_axe", "weapon_axe.png", 500, 250, 10, "춤추는 회전도끼", 15, 50)
-_shop_itemlist.weapon_chainsaw = new weapon(_shop_itemlist, "weapon_chainsaw", "weapon_chainsaw.png", 580, 250, 15, "텍사스의 추억", 30, 200)
-_shop_itemlist.weapon_lightsaber = new weapon(_shop_itemlist, "weapon_lightsaber", "weapon_lightsaber.png", 660, 250, 20, "일격필살", 40, 400)
-_shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "weapon_railgun.png", 740, 250, 25, "정조준 일격", 9999, 1000)
-=======
+
+
 // room, name, image, x_loc, y_loc, damage, skill_name, skill_damage
 _1st_floor_two.weapon_branch = new weapon(_1st_floor_two, "weapon_branch", "weapon_branch.png", 50, 600, 600, 5, "엄마의 회초리", 1, 0)
 _shop_itemlist.weapon_axe = new weapon(_shop_itemlist, "weapon_axe", "weapon_axe.png", 90, 90, 190, 10, "춤추는 회전도끼", 15, 50)
 _shop_itemlist.weapon_chainsaw = new weapon(_shop_itemlist, "weapon_chainsaw", "weapon_chainsaw.png", 100, 230, 190, 15, "텍사스의 추억", 30, 200)
 _shop_itemlist.weapon_lightsaber = new weapon(_shop_itemlist, "weapon_lightsaber", "weapon_lightsaber.png", 140, 370, 190, 20, "일격필살", 40, 400)
 _shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "weapon_railgun.png", 100, 510, 190, 25, "정조준 일격", 9999, 1000)
->>>>>>> master
+
 
 
 
@@ -370,7 +360,7 @@ _1st_floor_one.zombie2 = new zombie(_1st_floor_one, "zombie2", "3층좀비_1.png
 //=============================================================================================
 /* 2nd floor OR NPC */
 
-//_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator)
+_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator)
 
 Shop_NPC = new shopNPC();
 
