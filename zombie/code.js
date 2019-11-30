@@ -244,6 +244,7 @@ _3rd_floor_three = game.createRoom("_3rd_floor_three","헬스장_2.jpg")
 
 _4th_floor_one = game.createRoom("_4th_floor_one", "4층_복도.jpg")
 _4th_floor_two = game.createRoom("_4th_floor_two", "4층_회의실.jpg")
+_4th_floor_three = game.createRoom("_4th_floor_three", "_elevator_room.jpg")
 
 _roof_top_one = game.createRoom("_roof_top_one", "헬기장.jpg")
 _roof_top_two = game.createRoom("_roof_top_two", "_elevator_room.jpg")
@@ -259,6 +260,7 @@ var room_list = new Array(
     _3rd_floor_one,
     _4th_floor_one,
     _4th_floor_two,
+    _4th_floor_three,
     _roof_top_one,
     _roof_top_two);
 
@@ -459,21 +461,84 @@ _3rd_floor_three.left_arrow = new arrow(_3rd_floor_three,"left_arrow",_3rd_floor
 
 
 //=============================================================================================
-/* 4th floor */ // 회의실에서 
+/* 4th floor */ 
 _4th_floor_one.right_arrow = new arrow(_4th_floor_one, "right_arrow", _4th_floor_two)
-_4th_floor_one.left_arrow = new arrow(_4th_floor_one, "left_arrow", _4th_floor_two)
+_4th_floor_one.left_arrow = new arrow(_4th_floor_one, "left_arrow", _4th_floor_three)
 _4th_floor_two.left_arrow = new arrow(_4th_floor_two, "left_arrow", _4th_floor_one)
+_4th_floor_three.right_arrow = new arrow(_4th_floor_three, "right_arrow", _4th_floor_one)
+_4th_floor_three.elevator = new obj(_4th_floor_three, "elevator", "silver_button.png", 60, 800, 360)
+_4th_floor_three.elevator.onClick = function () { game.move(_elevator)}
 
 
+// 좀비와 디비디비딥
+var zombieFlag = 0
+var playerFlag = 0
 
+_4th_floor_two.up_arr = new obj(_4th_floor_two, "up_arr", "up_arrow.png", 200, 600, 500)
+_4th_floor_two.down_arr = new obj(_4th_floor_two, "down_arr", "down_arrow.png", 200, 600, 700)
+_4th_floor_two.left_arr = new obj(_4th_floor_two, "left_arr", "left_arrow.png", 200, 500, 600)
+_4th_floor_two.right_arr = new obj(_4th_floor_two, "right_arr", "right_arrow.png", 200, 700, 600)
+
+function dbdb(zombieFlag, playerFlag){
+    zombieFlag = Math.floor(Math.random()*10)
+    if(zombieFlag<2){zombieFlag = 1}
+    else if(zombieFlag<5){zombieFlag = 2}
+    else if(zombieFlag<8){zombieFlag = 3}
+    else if(zombieFlag<10){zombieFlag = 4}
+    
+    if(zombieFlag===playerFlag){
+        _4th_floor_two.db_zombie.obj.hide()
+        printMessage("좀비를 죽였다!")
+        _4th_floor_two.up_arr.obj.hide()
+        _4th_floor_two.down_arr.obj.hide()
+        _4th_floor_two.left_arr.obj.hide()
+        _4th_floor_two.right_arr.obj.hide()
+    } else {
+        player_life -= 30
+        printMessage("예측에 실패했다..!"+"\n"+player_life)
+        zombieFlag = 0
+        playerFlag = 0
+    }
+}
+
+_4th_floor_two.up_arr.onClick = function(){
+    playerFlag = 1
+    dbdb(zombieFlag, playerFlag)}
+_4th_floor_two.down_arr.onClick = function(){
+    playerFlag = 2
+    dbdb(zombieFlag, playerFlag)}
+_4th_floor_two.left_arr.onClick = function(){
+    playerFlag = 3
+    dbdb(zombieFlag, playerFlag)}
+_4th_floor_two.right_arr.onClick = function(){
+    playerFlag = 4
+    dbdb(zombieFlag, playerFlag)}
+
+_4th_floor_two.up_arr.obj.hide()
+_4th_floor_two.down_arr.obj.hide()
+_4th_floor_two.left_arr.obj.hide()
+_4th_floor_two.right_arr.obj.hide()
+
+_4th_floor_two.db_zombie = new obj(_4th_floor_two, "db_zombie", "zombie.png", 200, 640, 200);
+_4th_floor_two.db_zombie.onClick = function(){
+    printStory("좀비와 디비디비딥! \n\n 방향예측에 성공하면 zombie kill! \n\n 방향예측에 실패하면 life -30 ")
+
+    _4th_floor_two.up_arr.obj.show()
+    _4th_floor_two.down_arr.obj.show()
+    _4th_floor_two.left_arr.obj.show()
+    _4th_floor_two.right_arr.obj.show()
+}
 
 // ************************ 슬롯머신*************************
-// if문으로 할 번 돌릴 때 필요한 돈 정해야 함.
 _4th_floor_two.slot_machine_game = new obj(_4th_floor_two, "slot_machine_game", "슬롯머신_게임.png", 800, 640, 360)
 _4th_floor_two.slot_machine_game.obj.hide()
 
-_4th_floor_two.slot_machine = new obj(_4th_floor_two, "slot_machine", "슬롯머신_외관.png", 350, 1000, 500)
-_4th_floor_two.slot_machine.onClick = function() { _4th_floor_two.slot_machine_game.obj.show()} 
+_4th_floor_two.slot_machine = new obj(_4th_floor_two, "slot_machine", "슬롯머신_외관.png", 350, 1100, 500)
+_4th_floor_two.slot_machine.onClick = function() {
+    printStory("한 번에 단돈 90원! \n 777 잭팟 당첨시 +10000 \n 111 당첨시 +5000 \n 333 또는 999당첨시 +3000") 
+    _4th_floor_two.slot_machine_game.obj.show()
+    _4th_floor_two.slot_machine.obj.hide()
+} 
 
 var slotArray = new Array(0, 0, 0)
 _4th_floor_two.slot_machine_game.onClick = function(){
@@ -482,15 +547,16 @@ _4th_floor_two.slot_machine_game.onClick = function(){
         slotArray[1] = Math.floor(Math.random()*10)
         slotArray[2] = Math.floor(Math.random()*10)
         printMessage(slotArray[0]+" "+slotArray[1]+" "+slotArray[2])
-            if(slotArray[0]===7 && slotArray[1]===7 && slotArray[2]===7){
-                player_money += 10000
-            } // 잭팟
+            if(slotArray[0]===7 && slotArray[1]===7 && slotArray[2]===7){player_money += 10000}
+            else if(slotArray[0]===1 && slotArray[1]===1 && slotArray[2]===1){player_money += 5000}
+            else if(slotArray[0]===3 && slotArray[1]===3 && slotArray[2]===3){player_money += 3000}
+            else if(slotArray[0]===9 && slotArray[1]===9 && slotArray[2]===9){player_money += 3000}
         player_money-=90
     } else {
         printMessage("소지금이 부족합니다.")
     }
-
     _4th_floor_two.slot_machine_game.obj.hide()
+    _4th_floor_two.slot_machine.obj.show()
 }
 // ***************************슬롯머신*************************
 
@@ -513,7 +579,7 @@ _4th_floor_two.slot_machine_game.onClick = function(){
 /* roof_top */ // 신호를 주면 헬리콥터 show. 헬리콥터 onClick 탈출 성공
 _roof_top_one.left_arrow = new arrow(_roof_top_one, "left_arrow", _roof_top_two)
 _roof_top_two.right_arrow = new arrow(_roof_top_two, "right_arrow", _roof_top_one)
-_roof_top_two.elevator = new obj(_roof_top_two, "elevator", "_elevator.png", 100, 800, 360)
+_roof_top_two.elevator = new obj(_roof_top_two, "elevator", "silver_button.png", 60, 800, 360)
 _roof_top_two.elevator.onClick = function () { game.move(_elevator)}
 
     // 헬리콥터 호출하는 설정 정해야 함
@@ -541,7 +607,7 @@ var quest_list = {
 
 
 
-game.start(_1st_floor_one); // 게임시작
+game.start(_4th_floor_one); // 게임시작
 
 
 
