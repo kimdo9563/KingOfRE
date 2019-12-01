@@ -1,9 +1,11 @@
 ﻿/*
-==============================================
-|
-|
-|
-==============================================
+============================================================================================
+|   객체지향 프로그래밍 - 팀 프로젝트
+|   << Game Name >>
+|   X 조
+|   조원 : 김도형, 김혁민, 윤영배, 이우성
+|   wiki : https://github.com/kimdo9563/KingOfRE/wiki/API-%EB%A6%AC%EC%8A%A4%ED%8A%B8
+============================================================================================
 */
 
 function obj(room, name, image, width, x_loc, y_loc) {
@@ -33,7 +35,7 @@ function arrow(room, name, go_to_room, width, x_loc, y_loc) {
     } else if (name == "up_arrow") {
         obj.call(this, room, name, "up_arrow.png", width, x_loc, y_loc)  //200, 640, 650
     }
-    this.go_to_room = go_to_room;
+    this.go_to_room = typeof go_to_room !== 'undefined' ? go_to_room: this.room;
 }
 arrow.prototype = Object.create(obj.prototype);
 arrow.prototype.constructor = arrow;
@@ -519,10 +521,11 @@ _4th_floor_three.elevator.onClick = function () { game.move(_elevator)}
 var zombieFlag = 0
 var playerFlag = 0
 
-_4th_floor_two.up_arrow = new arrow(_4th_floor_two, "up_arrow", "up_arrow.png", 200, 600, 500)
-_4th_floor_two.down_arrow = new arrow(_4th_floor_two, "down_arrow", "down_arrow.png", 200, 600, 700)
-_4th_floor_two.left_arrow = new arrow(_4th_floor_two, "left_arrow", "left_arrow.png", 200, 500, 600)
-_4th_floor_two.right_arrow = new arrow(_4th_floor_two, "right_arrow", "right_arrow.png", 200, 700, 600)
+
+_4th_floor_two.up_arr = new obj(_4th_floor_two, "up_arr", "up_arrow.png", 200, 600, 500)
+_4th_floor_two.down_arr = new obj(_4th_floor_two, "down_arr", "down_arrow.png", 200, 600, 700)
+_4th_floor_two.left_arr = new obj(_4th_floor_two, "left_arr", "left_arrow.png", 200, 500, 600)
+_4th_floor_two.right_arr = new obj(_4th_floor_two, "right_arr", "right_arrow.png", 200, 700, 600)
 
 function dbdb(zombieFlag, playerFlag){
     zombieFlag = Math.floor(Math.random()*10)
