@@ -299,6 +299,9 @@ _4th_floor_one = game.createRoom("_4th_floor_one", "4층_복도.jpg")
 _4th_floor_two = game.createRoom("_4th_floor_two", "4층_회의실.jpg")
 _4th_floor_three = game.createRoom("_4th_floor_three", "_elevator_room.jpg")
 
+_5th_floor_one = game.createRoom("_5th_floor_one", "5층강당.jpg")
+_5th_floor_two = game.createRoom("_5th_floor_two", "_elevator_room.jpg")
+
 _boss_room_1 = game.createRoom("_boss_room_1", "dark_background.jpg"); // 방 생성
 _boss_room_2 = game.createRoom("_boss_room_2","보스방2.jpg")
 _boss_room_3 = game.createRoom("boss_room_3","background.png")
@@ -317,6 +320,8 @@ var room_list = new Array(
     _4th_floor_one,
     _4th_floor_two,
     _4th_floor_three,
+    _5th_floor_one,
+    _5th_floor_two,
     _roof_top_one,
     _roof_top_two);
 
@@ -360,6 +365,7 @@ _elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 
 _elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 565, 420, _2nd_floor_one)
 _elevator_button._3rd_floor = new empty_box(_elevator_button, "_3rd_floor", 60, 730, 420, _3rd_floor_one)
 _elevator_button._4th_floor = new empty_box(_elevator_button, "_4th_floor", 60, 565, 300, _4th_floor_one)
+_elevator_button._5th_floor = new empty_box(_elevator_button, "_5th_floor", 60, 730, 300, _5th_floor_one)
 _elevator_button._roof_top = new empty_box(_elevator_button, "_roof_top", 60, 730, 170, _roof_top_one)
 
 //==========================================================================================
@@ -706,6 +712,13 @@ _4th_floor_two.slot_machine_game.onClick = function(){
 
 //=============================================================================================
 /* 5th floor */
+_5th_floor_one.left_arrow = new arrow(_5th_floor_one, "left_arrow", _5th_floor_two, 150, 100, 360)
+_5th_floor_two.right_arrow = new arrow(_5th_floor_two, "right_arrow", _5th_floor_one, 150, 1200, 360)
+
+_5th_floor_one.zombie11 = new zombie(_5th_floor_one, "zombie11", "3층좀비_1.png", 120, 720, 400, 200, 30)
+_5th_floor_one.zombie12 = new zombie(_5th_floor_one, "zombie12", "3층좀비_2.png", 120, 1000, 520, 150, 35)
+_5th_floor_one.zombie13 = new zombie(_5th_floor_one, "zombie13", "헬멧좀비.png", 120, 200, 500, 150, 35)
+
 
 
 
@@ -853,8 +866,8 @@ function signal(){
 }
 
 _roof_top_one.lanternOff = new obj(_roof_top_one, "lanternOff", "랜턴오프.png", 150, 1000, 580)
-_roof_top_one.on_button = new obj(_roof_top_one, "on_button", "onbutton.png", 150, 1150, 450)
-_roof_top_one.off_button = new obj(_roof_top_one, "off_button", "offbutton.png", 150, 1150, 550)
+_roof_top_one.on_button = new obj(_roof_top_one, "on_button", "onbutton.png", 90, 1150, 400)
+_roof_top_one.off_button = new obj(_roof_top_one, "off_button", "offbutton.png", 90, 1150, 500)
 
 _roof_top_one.on_button.obj.hide()
 _roof_top_one.off_button.obj.hide()
@@ -925,17 +938,8 @@ var quest_list = {
         "description": "그래! 김혁민이는 잘 잡아왔구만...\n"+"하지만 말야, 다른 문제가 생겼어..",
         "flag": 0
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
+
 }
 
->>>>>>> master
-
-}*/
-=======
-}
-
->>>>>>> master
 
 game.start(_1st_floor_one)
