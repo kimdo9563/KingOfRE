@@ -301,6 +301,7 @@ _4th_floor_three = game.createRoom("_4th_floor_three", "_elevator_room.jpg")
 
 _5th_floor_one = game.createRoom("_5th_floor_one", "5층강당.jpg")
 _5th_floor_two = game.createRoom("_5th_floor_two", "_elevator_room.jpg")
+_5th_floor_three = game.createRoom("_5th_floor_three", "5층화장실.jpg")
 
 _boss_room_1 = game.createRoom("_boss_room_1", "dark_background.jpg"); // 방 생성
 _boss_room_2 = game.createRoom("_boss_room_2","보스방2.jpg")
@@ -322,6 +323,7 @@ var room_list = new Array(
     _4th_floor_three,
     _5th_floor_one,
     _5th_floor_two,
+    _5th_floor_three,
     _roof_top_one,
     _roof_top_two);
 
@@ -717,14 +719,22 @@ _4th_floor_two.slot_machine_game.onClick = function(){
 //=============================================================================================
 /* 5th floor */
 _5th_floor_one.left_arrow = new arrow(_5th_floor_one, "left_arrow", _5th_floor_two, 150, 100, 360)
+_5th_floor_one.right_arrow = new arrow(_5th_floor_one, "right_arrow", _5th_floor_three, 150, 1200, 360)
 _5th_floor_two.right_arrow = new arrow(_5th_floor_two, "right_arrow", _5th_floor_one, 150, 1200, 360)
+_5th_floor_three.left_arrow = new arrow(_5th_floor_three, "left_arrow", _5th_floor_one, 150, 100, 360)
 _5th_floor_two.elevator = new obj(_5th_floor_two, "elevator", "silver_button.png", 60, 800, 360)
+
 _5th_floor_two.elevator.onClick = function () { game.move(_elevator)}
 
 _5th_floor_one.zombie11 = new zombie(_5th_floor_one, "zombie11", "3층좀비_1.png", 120, 720, 600, 200, 30)
-_5th_floor_one.zombie12 = new zombie(_5th_floor_one, "zombie12", "3층좀비_2.png", 120, 1000, 520, 150, 35)
-_5th_floor_one.zombie13 = new zombie(_5th_floor_one, "zombie13", "헬멧좀비.png", 120, 200, 500, 150, 35)
+_5th_floor_one.zombie12 = new zombie(_5th_floor_one, "zombie12", "3층좀비_2.png", 120, 1000, 540, 150, 35)
+_5th_floor_one.zombie13 = new zombie(_5th_floor_one, "zombie13", "헬멧좀비.png", 120, 200, 550, 200, 35)
 _5th_floor_one.zombie14 = new zombie(_5th_floor_one, "zombie14", "헤드셋좀비.png", 120, 400, 510, 150, 35)
+
+_5th_floor_three.zombie21 = new zombie(_5th_floor_three, "zombie21", "zombie.png", 170, 750, 420, 200, 30)
+_5th_floor_three.zombie22 = new zombie(_5th_floor_three, "zombie22", "좀비_여자.png", 190, 1000, 540, 150, 35)
+_5th_floor_three.zombie23 = new zombie(_5th_floor_three, "zombie23", "좀비_남자.png", 200, 200, 550, 200, 35)
+_5th_floor_three.zombie24 = new zombie(_5th_floor_three, "zombie24", "좀비_야쿠자.png", 180, 420, 480, 150, 35)
 
 
 
@@ -949,4 +959,4 @@ var quest_list = {
 }
 
 
-game.start(_1st_floor_one)
+game.start(_5th_floor_three)
