@@ -984,4 +984,4 @@ var quest_list = {
 }
 
 
-game.start(_5th_floor_three)
+game.start(_1st_floor_one)
