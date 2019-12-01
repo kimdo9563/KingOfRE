@@ -300,6 +300,10 @@ _4th_floor_one = game.createRoom("_4th_floor_one", "4층_복도.jpg")
 _4th_floor_two = game.createRoom("_4th_floor_two", "4층_회의실.jpg")
 _4th_floor_three = game.createRoom("_4th_floor_three", "_elevator_room.jpg")
 
+_5th_floor_one = game.createRoom("_5th_floor_one", "5층강당.jpg")
+_5th_floor_two = game.createRoom("_5th_floor_two", "_elevator_room.jpg")
+_5th_floor_three = game.createRoom("_5th_floor_three", "5층화장실.jpg")
+
 _boss_room_1 = game.createRoom("_boss_room_1", "dark_background.jpg"); // 방 생성
 _boss_room_2 = game.createRoom("_boss_room_2","보스방2.jpg")
 _boss_room_3 = game.createRoom("boss_room_3","background.png")
@@ -318,6 +322,9 @@ var room_list = new Array(
     _4th_floor_one,
     _4th_floor_two,
     _4th_floor_three,
+    _5th_floor_one,
+    _5th_floor_two,
+    _5th_floor_three,
     _roof_top_one,
     _roof_top_two);
 
@@ -361,6 +368,7 @@ _elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 
 _elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 565, 420, _2nd_floor_one)
 _elevator_button._3rd_floor = new empty_box(_elevator_button, "_3rd_floor", 60, 730, 420, _3rd_floor_one)
 _elevator_button._4th_floor = new empty_box(_elevator_button, "_4th_floor", 60, 565, 300, _4th_floor_one)
+_elevator_button._5th_floor = new empty_box(_elevator_button, "_5th_floor", 60, 730, 300, _5th_floor_one)
 _elevator_button._roof_top = new empty_box(_elevator_button, "_roof_top", 60, 730, 170, _roof_top_one)
 
 //==========================================================================================
@@ -667,7 +675,7 @@ _4th_floor_two.slot_machine_game.obj.hide()
 
 _4th_floor_two.slot_machine = new obj(_4th_floor_two, "slot_machine", "슬롯머신_외관.png", 320, 1100, 500)
 _4th_floor_two.slot_machine.onClick = function() {
-    printStory("한 번에 단돈 90원! \n 77 잭팟 당첨시 +10000 \n 11 또는 99 당첨시 +5000 \n 22 또는 88당첨시 +3000 \n 33 또는 55당첨시 +1000") 
+    printStory("한 번에 단돈 90원! \n 77 잭팟 당첨시 +10000 \n 11 또는 99 당첨시 +5000 \n 22 또는 00 또는 88당첨시 +3000 \n 11또는 33 또는 44 또는 55당첨시 +1000") 
     _4th_floor_two.slot_machine_game.obj.show()
     _4th_floor_two.slot_machine.obj.hide()
 } 
@@ -692,6 +700,10 @@ _4th_floor_two.slot_machine_game.onClick = function(){
                 printMessage("축하합니다! \n 소지금 +3000")}
             else if(slotArray[0]===8 && slotArray[1]===8){Player.money_change(3000)
                 printMessage("축하합니다! \n 소지금 +3000")}
+            else if(slotArray[0]===0 && slotArray[1]===0){Player.money_change(3000)
+                printMessage("축하합니다! \n 소지금 +3000")}
+            else if(slotArray[0]===4 && slotArray[1]===4){Player.money_change(1000)
+                printMessage("축하합니다! \n 소지금 +1000")}
         Player.money_change(-90)
     } else {
         printMessage("소지금이 부족합니다.")
@@ -704,7 +716,50 @@ _4th_floor_two.slot_machine_game.onClick = function(){
 
 //=============================================================================================
 /* 5th floor */
+_5th_floor_one.left_arrow = new arrow(_5th_floor_one, "left_arrow", _5th_floor_two, 150, 100, 360)
+_5th_floor_one.right_arrow = new arrow(_5th_floor_one, "right_arrow", _5th_floor_three, 150, 1200, 360)
+_5th_floor_two.right_arrow = new arrow(_5th_floor_two, "right_arrow", _5th_floor_one, 150, 1200, 360)
+_5th_floor_three.left_arrow = new arrow(_5th_floor_three, "left_arrow", _5th_floor_one, 150, 100, 360)
+_5th_floor_two.elevator = new obj(_5th_floor_two, "elevator", "silver_button.png", 60, 800, 360)
+_5th_floor_two.elevator.onClick = function () { game.move(_elevator)}
 
+function respawn1(){
+    _5th_floor_one.zombie11.obj.show()
+    _5th_floor_one.zombie12.obj.show()
+    _5th_floor_one.zombie13.obj.show()
+    _5th_floor_one.zombie14.obj.show()
+}
+
+function respawn2(){
+    _5th_floor_three.zombie21.obj.show()
+    _5th_floor_three.zombie22.obj.show()
+    _5th_floor_three.zombie23.obj.show()
+    _5th_floor_three.zombie24.obj.show()
+}
+
+_5th_floor_one.left_arrow.onClick = function(){
+    game.move(_5th_floor_two)
+    respawn1()
+}
+_5th_floor_one.right_arrow.onClick = function(){
+    respawn1()
+    game.move(_5th_floor_three)
+}
+_5th_floor_three.left_arrow.onClick = function(){
+    respawn2()
+    game.move(_5th_floor_one)
+
+}
+
+_5th_floor_one.zombie11 = new zombie(_5th_floor_one, "zombie11", "3층좀비_1.png", 120, 720, 600, 10, 3)
+_5th_floor_one.zombie12 = new zombie(_5th_floor_one, "zombie12", "3층좀비_2.png", 120, 1000, 540, 10, 5)
+_5th_floor_one.zombie13 = new zombie(_5th_floor_one, "zombie13", "헬멧좀비.png", 120, 200, 550, 10, 3)
+_5th_floor_one.zombie14 = new zombie(_5th_floor_one, "zombie14", "헤드셋좀비.png", 120, 400, 510, 15, 5)
+
+_5th_floor_three.zombie21 = new zombie(_5th_floor_three, "zombie21", "zombie.png", 170, 750, 420, 10, 30)
+_5th_floor_three.zombie22 = new zombie(_5th_floor_three, "zombie22", "좀비_여자.png", 190, 1000, 540, 10, 5)
+_5th_floor_three.zombie23 = new zombie(_5th_floor_three, "zombie23", "좀비_남자.png", 200, 300, 550, 10, 35)
+_5th_floor_three.zombie24 = new zombie(_5th_floor_three, "zombie24", "좀비_야쿠자.png", 180, 520, 480, 10, 35)
 
 
 //=============================================================================================
@@ -851,8 +906,8 @@ function signal(){
 }
 
 _roof_top_one.lanternOff = new obj(_roof_top_one, "lanternOff", "랜턴오프.png", 150, 1000, 580)
-_roof_top_one.on_button = new obj(_roof_top_one, "on_button", "onbutton.png", 150, 1150, 450)
-_roof_top_one.off_button = new obj(_roof_top_one, "off_button", "offbutton.png", 150, 1150, 550)
+_roof_top_one.on_button = new obj(_roof_top_one, "on_button", "onbutton.png", 90, 1150, 400)
+_roof_top_one.off_button = new obj(_roof_top_one, "off_button", "offbutton.png", 90, 1150, 500)
 
 _roof_top_one.on_button.obj.hide()
 _roof_top_one.off_button.obj.hide()
@@ -923,6 +978,7 @@ var quest_list = {
         "description": "그래! 김혁민이는 잘 잡아왔구만...\n"+"하지만 말야, 다른 문제가 생겼어..",
         "flag": 0
     }
+
 }
 
 
