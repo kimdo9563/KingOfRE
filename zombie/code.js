@@ -494,6 +494,8 @@ _4th_floor_three.right_arrow = new arrow(_4th_floor_three, "right_arrow", _4th_f
 _4th_floor_three.elevator = new obj(_4th_floor_three, "elevator", "silver_button.png", 60, 800, 360)
 _4th_floor_three.elevator.onClick = function () { game.move(_elevator)}
 
+// 문지기 좀비
+_4th_floor_one.zombie1 = new zombie(_4th_floor_one, "zombie1", "3층좀비_4.png", 100, 640, 450, 30, 2);
 
 // 좀비와 디비디비딥
 var zombieFlag = 0
@@ -520,9 +522,10 @@ function dbdb(zombieFlag, playerFlag){
         _4th_floor_two.right_arr.obj.hide()
     } else {
         player_life -= 30
-        printMessage("예측에 실패했다..!"+"\n"+player_life)
+        printMessage("예측에 실패했다..!"+"\n"+"남은 체력: " + player_life)
         zombieFlag = 0
         playerFlag = 0
+        if(player_life<0){ game.gameover()}
     }
 }
 
@@ -547,7 +550,7 @@ _4th_floor_two.right_arr.obj.hide()
 _4th_floor_two.db_zombie = new obj(_4th_floor_two, "db_zombie", "zombie.png", 200, 640, 200);
 _4th_floor_two.db_zombie.onClick = function(){
     printStory("좀비와 디비디비딥! \n\n 방향예측에 성공하면 zombie kill! \n\n 방향예측에 실패하면 life -30 ")
-
+// 좀비의 체력을 깎는 것도 괜찮을듯
     _4th_floor_two.up_arr.obj.show()
     _4th_floor_two.down_arr.obj.show()
     _4th_floor_two.left_arr.obj.show()
@@ -743,10 +746,78 @@ _roof_top_two.right_arrow = new arrow(_roof_top_two, "right_arrow", _roof_top_on
 _roof_top_two.elevator = new obj(_roof_top_two, "elevator", "silver_button.png", 60, 800, 360)
 _roof_top_two.elevator.onClick = function () { game.move(_elevator)}
 
+    // 헬기장 좀비를 해치워야 헬기 호출 가능
+_roof_top_one.last_zombie = new zombie(_roof_top_one, "last_zombie", "3층좀비_4.png", 100, 640, 450, 30, 2);
+
+    // 따따따 따 따 따 따따따
+var rescueArr = new Array(1,1,1,0,1,0,1,0,1,0,1,1,1)
+var playerArr = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0)
+var clickCount = 0
+var lanternFlag = 0
+
+_roof_top_one.lanternOff = new obj(_roof_top_one, "lanternOff", "랜턴오프.png", 200, 400, 560)
+_roof_top_one.on_button = new obj(_roof_top_one, "on_button", "up_arrow.png", 100, 350, 200)
+_roof_top_one.off_button = new obj(_roof_top_one, "off_button", "down_arrow.png", 50, 350, 350)
+
+_roof_top_one.on_button.obj.hide()
+_roof_top_one.off_button.obj.hide()
+
+_roof_top_one.on_button.onClick = function(){
+    if(lanternFlag == 0){
+        _roof_top_one.lanternOff.obj.setSprite("랜턴온.png")
+        lanternFlag = 1
+        playerArr.shift()
+        playerArr.push(1)
+        clickCount++
+        printMessage(clickCount + "\n" + playerArr)
+    } else if(lanternFlag == 1){
+        playerArr.shift()
+        playerArr.push(1)
+        clickCount++
+        printMessage(clickCount + "\n" + playerArr)
+    }
+}
+_roof_top_one.off_button.onClick = function(){
+    if(lanternFlag == 1){
+        _roof_top_one.lanternOff.obj.setSprite("랜턴오프.png")
+        lanternFlag = 0
+        playerArr.shift()
+        playerArr.push(0)
+        clickCount++
+        printMessage(clickCount + "\n" + playerArr)
+    } else if(lanternFlag == 0) {
+        playerArr.shift()
+        playerArr.push(0)
+        clickCount++
+        printMessage(clickCount + "\n" + playerArr)
+    }
+}
+
+_roof_top_one.lanternOff.obj.close()
+_roof_top_one.lanternOff.onClick = function(){
+    _roof_top_one.on_button.obj.show()
+    _roof_top_one.off_button.obj.show()
+}
+
+if(clickCount===13)
+{
+    if(playerArr === (1,1,1,0,1,0,1,0,1,0,1,1,1)){
+        _roof_top_one.helicopter.obj.show()
+        _roof_top_one.on_button.obj.hide()
+        _roof_top_one.off_button.obj.hide()
+    } else {
+        printMessage("신호가 정확하지 않습니다. 다시 시도하세요.")
+        clickCount = 0
+    }
+}
+
+
     // 헬리콥터 호출하는 설정 정해야 함
 _roof_top_one.helicopter = new obj(_roof_top_one, "helicopter", "helicopter.png", 300, 720, 360)
 _roof_top_one.helicopter.obj.hide()
-_roof_top_one.helicopter.onClick = function(){ game.clear()}
+_roof_top_one.helicopter.onClick = function(){ 
+    printMessage("헬리콥터를 타고 탈출에 성공했습니다!")
+    game.clear()}
 
 
 //=============================================================================================
@@ -768,7 +839,7 @@ _roof_top_one.helicopter.onClick = function(){ game.clear()}
 
 
 
-game.start(_4th_floor_one); // 게임시작
+game.start(_roof_top_one); // 게임시작
 
 
 
