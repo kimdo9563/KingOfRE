@@ -675,7 +675,7 @@ _4th_floor_two.slot_machine_game.obj.hide()
 
 _4th_floor_two.slot_machine = new obj(_4th_floor_two, "slot_machine", "슬롯머신_외관.png", 320, 1100, 500)
 _4th_floor_two.slot_machine.onClick = function() {
-    printStory("한 번에 단돈 90원! \n 77 잭팟 당첨시 +10000 \n 11 또는 99 당첨시 +5000 \n 22 또는 88당첨시 +3000 \n 33 또는 55당첨시 +1000") 
+    printStory("한 번에 단돈 90원! \n 77 잭팟 당첨시 +10000 \n 11 또는 99 당첨시 +5000 \n 22 또는 00 또는 88당첨시 +3000 \n 11또는 33 또는 44 또는 55당첨시 +1000") 
     _4th_floor_two.slot_machine_game.obj.show()
     _4th_floor_two.slot_machine.obj.hide()
 } 
@@ -700,6 +700,10 @@ _4th_floor_two.slot_machine_game.onClick = function(){
                 printMessage("축하합니다! \n 소지금 +3000")}
             else if(slotArray[0]===8 && slotArray[1]===8){Player.money_change(3000)
                 printMessage("축하합니다! \n 소지금 +3000")}
+            else if(slotArray[0]===0 && slotArray[1]===0){Player.money_change(3000)
+                printMessage("축하합니다! \n 소지금 +3000")}
+            else if(slotArray[0]===4 && slotArray[1]===4){Player.money_change(1000)
+                printMessage("축하합니다! \n 소지금 +1000")}
         Player.money_change(-90)
     } else {
         printMessage("소지금이 부족합니다.")
@@ -714,10 +718,13 @@ _4th_floor_two.slot_machine_game.onClick = function(){
 /* 5th floor */
 _5th_floor_one.left_arrow = new arrow(_5th_floor_one, "left_arrow", _5th_floor_two, 150, 100, 360)
 _5th_floor_two.right_arrow = new arrow(_5th_floor_two, "right_arrow", _5th_floor_one, 150, 1200, 360)
+_5th_floor_two.elevator = new obj(_5th_floor_two, "elevator", "silver_button.png", 60, 800, 360)
+_5th_floor_two.elevator.onClick = function () { game.move(_elevator)}
 
-_5th_floor_one.zombie11 = new zombie(_5th_floor_one, "zombie11", "3층좀비_1.png", 120, 720, 400, 200, 30)
+_5th_floor_one.zombie11 = new zombie(_5th_floor_one, "zombie11", "3층좀비_1.png", 120, 720, 600, 200, 30)
 _5th_floor_one.zombie12 = new zombie(_5th_floor_one, "zombie12", "3층좀비_2.png", 120, 1000, 520, 150, 35)
 _5th_floor_one.zombie13 = new zombie(_5th_floor_one, "zombie13", "헬멧좀비.png", 120, 200, 500, 150, 35)
+_5th_floor_one.zombie14 = new zombie(_5th_floor_one, "zombie14", "헤드셋좀비.png", 120, 400, 510, 150, 35)
 
 
 
