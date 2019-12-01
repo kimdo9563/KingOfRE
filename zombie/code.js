@@ -723,20 +723,45 @@ _5th_floor_one.right_arrow = new arrow(_5th_floor_one, "right_arrow", _5th_floor
 _5th_floor_two.right_arrow = new arrow(_5th_floor_two, "right_arrow", _5th_floor_one, 150, 1200, 360)
 _5th_floor_three.left_arrow = new arrow(_5th_floor_three, "left_arrow", _5th_floor_one, 150, 100, 360)
 _5th_floor_two.elevator = new obj(_5th_floor_two, "elevator", "silver_button.png", 60, 800, 360)
-
 _5th_floor_two.elevator.onClick = function () { game.move(_elevator)}
 
-_5th_floor_one.zombie11 = new zombie(_5th_floor_one, "zombie11", "3층좀비_1.png", 120, 720, 600, 200, 30)
-_5th_floor_one.zombie12 = new zombie(_5th_floor_one, "zombie12", "3층좀비_2.png", 120, 1000, 540, 150, 35)
-_5th_floor_one.zombie13 = new zombie(_5th_floor_one, "zombie13", "헬멧좀비.png", 120, 200, 550, 200, 35)
-_5th_floor_one.zombie14 = new zombie(_5th_floor_one, "zombie14", "헤드셋좀비.png", 120, 400, 510, 150, 35)
+function respawn1(){
+    _5th_floor_one.zombie11.obj.show()
+    _5th_floor_one.zombie12.obj.show()
+    _5th_floor_one.zombie13.obj.show()
+    _5th_floor_one.zombie14.obj.show()
+}
 
-_5th_floor_three.zombie21 = new zombie(_5th_floor_three, "zombie21", "zombie.png", 170, 750, 420, 200, 30)
-_5th_floor_three.zombie22 = new zombie(_5th_floor_three, "zombie22", "좀비_여자.png", 190, 1000, 540, 150, 35)
-_5th_floor_three.zombie23 = new zombie(_5th_floor_three, "zombie23", "좀비_남자.png", 200, 200, 550, 200, 35)
-_5th_floor_three.zombie24 = new zombie(_5th_floor_three, "zombie24", "좀비_야쿠자.png", 180, 420, 480, 150, 35)
+function respawn2(){
+    _5th_floor_three.zombie21.obj.show()
+    _5th_floor_three.zombie22.obj.show()
+    _5th_floor_three.zombie23.obj.show()
+    _5th_floor_three.zombie24.obj.show()
+}
 
+_5th_floor_one.left_arrow.onClick = function(){
+    game.move(_5th_floor_two)
+    respawn1()
+}
+_5th_floor_one.right_arrow.onClick = function(){
+    respawn1()
+    game.move(_5th_floor_three)
+}
+_5th_floor_three.left_arrow.onClick = function(){
+    respawn2()
+    game.move(_5th_floor_one)
 
+}
+
+_5th_floor_one.zombie11 = new zombie(_5th_floor_one, "zombie11", "3층좀비_1.png", 120, 720, 600, 10, 3)
+_5th_floor_one.zombie12 = new zombie(_5th_floor_one, "zombie12", "3층좀비_2.png", 120, 1000, 540, 10, 5)
+_5th_floor_one.zombie13 = new zombie(_5th_floor_one, "zombie13", "헬멧좀비.png", 120, 200, 550, 10, 3)
+_5th_floor_one.zombie14 = new zombie(_5th_floor_one, "zombie14", "헤드셋좀비.png", 120, 400, 510, 15, 5)
+
+_5th_floor_three.zombie21 = new zombie(_5th_floor_three, "zombie21", "zombie.png", 170, 750, 420, 10, 30)
+_5th_floor_three.zombie22 = new zombie(_5th_floor_three, "zombie22", "좀비_여자.png", 190, 1000, 540, 10, 5)
+_5th_floor_three.zombie23 = new zombie(_5th_floor_three, "zombie23", "좀비_남자.png", 200, 300, 550, 10, 35)
+_5th_floor_three.zombie24 = new zombie(_5th_floor_three, "zombie24", "좀비_야쿠자.png", 180, 520, 480, 10, 35)
 
 
 //=============================================================================================
