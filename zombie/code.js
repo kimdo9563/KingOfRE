@@ -314,11 +314,11 @@ _elevator.button_1 = new empty_box(_elevator, "button_1", 80, 1040, 420, _elevat
 _elevator.button_2 = new empty_box(_elevator, "button_2", 80, 1040, 485, _elevator_button)
 _elevator.button_3 = new empty_box(_elevator, "button_3", 80, 1040, 550, _elevator_button)
 _elevator.button_4 = new empty_box(_elevator, "button_4", 80, 1040, 590, _elevator_button)
-_elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 580, 530, _1st_floor_three)
-_elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 685, 530, _2nd_floor_one)
-_elevator_button._3rd_floor = new empty_box(_elevator_button, "_3rd_floor", 60, 685, 480, _3rd_floor_one)
-_elevator_button._4th_floor = new empty_box(_elevator_button, "_4th_floor", 60, 580, 480, _4th_floor_one)
-_elevator_button._roof_top = new empty_box(_elevator_button, "_roof_top", 60, 580, 380, _roof_top_one)
+_elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 730, 540, _1st_floor_three)
+_elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 565, 420, _2nd_floor_one)
+_elevator_button._3rd_floor = new empty_box(_elevator_button, "_3rd_floor", 60, 730, 420, _3rd_floor_one)
+_elevator_button._4th_floor = new empty_box(_elevator_button, "_4th_floor", 60, 565, 300, _4th_floor_one)
+_elevator_button._roof_top = new empty_box(_elevator_button, "_roof_top", 60, 730, 170, _roof_top_one)
 
 //==========================================================================================
 /* Battle Field */
@@ -552,15 +552,23 @@ _4th_floor_three.right_arrow = new arrow(_4th_floor_three, "right_arrow", _4th_f
 _4th_floor_three.elevator = new obj(_4th_floor_three, "elevator", "silver_button.png", 60, 800, 360)
 _4th_floor_three.elevator.onClick = function () { game.move(_elevator)}
 
+// 문지기 좀비
+_4th_floor_one.zombie1 = new zombie(_4th_floor_one, "zombie1", "3층좀비_4.png", 100, 640, 450, 30, 2);
+
 // 좀비와 디비디비딥
 var zombieFlag = 0
 var playerFlag = 0
 
+_4th_floor_two.zombie_heart = new obj(_4th_floor_two, "zombie_heart", "멈추지않는심장.png", 100, 640, 420)
+_4th_floor_two.zombie_heart.obj.hide()
+_4th_floor_two.zombie_heart.onClick = function(){
+    _4th_floor_two.zombie_heart.obj.pick()
+}
 
-_4th_floor_two.up_arr = new obj(_4th_floor_two, "up_arr", "up_arrow.png", 200, 600, 500)
-_4th_floor_two.down_arr = new obj(_4th_floor_two, "down_arr", "down_arrow.png", 200, 600, 700)
-_4th_floor_two.left_arr = new obj(_4th_floor_two, "left_arr", "left_arrow.png", 200, 500, 600)
-_4th_floor_two.right_arr = new obj(_4th_floor_two, "right_arr", "right_arrow.png", 200, 700, 600)
+_4th_floor_two.up_arr = new obj(_4th_floor_two, "up_arr", "up_arrow.png", 100, 600, 460)
+_4th_floor_two.down_arr = new obj(_4th_floor_two, "down_arr", "down_arrow.png", 100, 600, 660)
+_4th_floor_two.left_arr = new obj(_4th_floor_two, "left_arr", "left_arrow.png", 100, 500, 560)
+_4th_floor_two.right_arr = new obj(_4th_floor_two, "right_arr", "right_arrow.png", 100, 700, 560)
 
 function dbdb(zombieFlag, playerFlag){
     zombieFlag = Math.floor(Math.random()*10)
@@ -571,7 +579,8 @@ function dbdb(zombieFlag, playerFlag){
     
     if(zombieFlag===playerFlag){
         _4th_floor_two.db_zombie.obj.hide()
-        printMessage("좀비를 죽였다!")
+        _4th_floor_two.zombie_heart.obj.show()
+        printMessage("좀비를 물리치니 심장이 떨어졌다.")
         _4th_floor_two.up_arr.obj.hide()
         _4th_floor_two.down_arr.obj.hide()
         _4th_floor_two.left_arr.obj.hide()
@@ -581,6 +590,7 @@ function dbdb(zombieFlag, playerFlag){
         printMessage("예측에 실패했다..!"+"\n"+Player.life)
         zombieFlag = 0
         playerFlag = 0
+        if(player_life<0){ game.gameover()}
     }
 }
 
@@ -605,7 +615,6 @@ _4th_floor_two.right_arr.obj.hide()
 _4th_floor_two.db_zombie = new obj(_4th_floor_two, "db_zombie", "zombie.png", 200, 640, 200);
 _4th_floor_two.db_zombie.onClick = function(){
     printStory("좀비와 디비디비딥! \n\n 방향예측에 성공하면 zombie kill! \n\n 방향예측에 실패하면 life -30 ")
-
     _4th_floor_two.up_arr.obj.show()
     _4th_floor_two.down_arr.obj.show()
     _4th_floor_two.left_arr.obj.show()
@@ -617,24 +626,33 @@ _4th_floor_two.db_zombie.onClick = function(){
 _4th_floor_two.slot_machine_game = new obj(_4th_floor_two, "slot_machine_game", "슬롯머신_게임.png", 800, 640, 360)
 _4th_floor_two.slot_machine_game.obj.hide()
 
-_4th_floor_two.slot_machine = new obj(_4th_floor_two, "slot_machine", "슬롯머신_외관.png", 350, 1100, 500)
+_4th_floor_two.slot_machine = new obj(_4th_floor_two, "slot_machine", "슬롯머신_외관.png", 320, 1100, 500)
 _4th_floor_two.slot_machine.onClick = function() {
-    printStory("한 번에 단돈 90원! \n 777 잭팟 당첨시 +10000 \n 111 당첨시 +5000 \n 333 또는 999당첨시 +3000") 
+    printStory("한 번에 단돈 90원! \n 77 잭팟 당첨시 +10000 \n 11 또는 99 당첨시 +5000 \n 22 또는 88당첨시 +3000 \n 33 또는 55당첨시 +1000") 
     _4th_floor_two.slot_machine_game.obj.show()
     _4th_floor_two.slot_machine.obj.hide()
 } 
 
-var slotArray = new Array(0, 0, 0)
+var slotArray = new Array(0, 0)
 _4th_floor_two.slot_machine_game.onClick = function(){
     if(Player.money > 100){
         slotArray[0] = Math.floor(Math.random()*10)
         slotArray[1] = Math.floor(Math.random()*10)
-        slotArray[2] = Math.floor(Math.random()*10)
-        printMessage(slotArray[0]+" "+slotArray[1]+" "+slotArray[2])
-            if(slotArray[0]===7 && slotArray[1]===7 && slotArray[2]===7){Player.money_change(10000)}
-            else if(slotArray[0]===1 && slotArray[1]===1 && slotArray[2]===1){Player.money_change(5000)}
-            else if(slotArray[0]===3 && slotArray[1]===3 && slotArray[2]===3){Player.money_change(3000)}
-            else if(slotArray[0]===9 && slotArray[1]===9 && slotArray[2]===9){Player.money_change(3000)}
+        printMessage(slotArray[0]+" "+slotArray[1])
+            if(slotArray[0]===7 && slotArray[1]===7){Player.money_change(10000)
+            printMessage("축하합니다! \n 소지금 +10000")}
+            else if(slotArray[0]===1 && slotArray[1]===1){Player.money_change(5000)
+                printMessage("축하합니다! \n 소지금 +5000")}
+            else if(slotArray[0]===3 && slotArray[1]===3){Player.money_change(1000)
+                printMessage("축하합니다! \n 소지금 +1000")}
+            else if(slotArray[0]===5 && slotArray[1]===5){Player.money_change(1000)
+                printMessage("축하합니다! \n 소지금 +1000")}
+            else if(slotArray[0]===9 && slotArray[1]===9){Player.money_change(5000)
+                printMessage("축하합니다! \n 소지금 +5000")}
+            else if(slotArray[0]===2 && slotArray[1]===2){Player.money_change(3000)
+                printMessage("축하합니다! \n 소지금 +3000")}
+            else if(slotArray[0]===8 && slotArray[1]===8){Player.money_change(3000)
+                printMessage("축하합니다! \n 소지금 +3000")}
         Player.money_change(-90)
     } else {
         printMessage("소지금이 부족합니다.")
@@ -772,9 +790,82 @@ _roof_top_two.right_arrow = new arrow(_roof_top_two, "right_arrow", _roof_top_on
 _roof_top_two.elevator = new obj(_roof_top_two, "elevator", "silver_button.png", 60, 800, 360)
 _roof_top_two.elevator.onClick = function () { game.move(_elevator) }
 
-    // 헬리콥터 호출하는 설정 정해야 함
-_roof_top_one.helicopter = new obj(_roof_top_one, "helicopter", "helicopter.png", 300, 720, 360)
+    // 1 0 1 0 신호
+var playerArr = new Array(0,0,0,0)
+var clickCount = 0
+var lanternFlag = 0
+function signal(){
+    if(playerArr[0]==1 && playerArr[1]==0&&playerArr[2]==1&&playerArr[3]==0){
+        printMessage("헬리콥터가 랜턴의 신호를 보고 옥상에 착륙했다!")
+        _roof_top_one.helicopter.obj.show()
+        _roof_top_one.lanternOff.obj.hide()
+        _roof_top_one.on_button.obj.hide()
+        _roof_top_one.off_button.obj.hide()
+    } else if(clickCount == 4) {
+        printMessage("신호가 틀립니다.")
+        clickCount=0
+        playerArr[0]=0
+        playerArr[1]=0
+        playerArr[2]=0
+        playerArr[3]=0
+    }
+}
+
+_roof_top_one.lanternOff = new obj(_roof_top_one, "lanternOff", "랜턴오프.png", 150, 1000, 580)
+_roof_top_one.on_button = new obj(_roof_top_one, "on_button", "onbutton.png", 150, 1150, 450)
+_roof_top_one.off_button = new obj(_roof_top_one, "off_button", "offbutton.png", 150, 1150, 550)
+
+_roof_top_one.on_button.obj.hide()
+_roof_top_one.off_button.obj.hide()
+
+_roof_top_one.on_button.onClick = function(){
+    if(lanternFlag == 0){
+        _roof_top_one.lanternOff.obj.setSprite("랜턴온.png")
+        lanternFlag = 1
+        playerArr.shift()
+        playerArr.push(1)
+        clickCount++
+        printMessage(clickCount + "\n" + playerArr)
+        signal()
+    } else if(lanternFlag == 1){
+        playerArr.shift()
+        playerArr.push(1)
+        clickCount++
+        printMessage(clickCount + "\n" + playerArr)
+        signal()
+    }
+}
+_roof_top_one.off_button.onClick = function(){
+    if(lanternFlag == 1){
+        _roof_top_one.lanternOff.obj.setSprite("랜턴오프.png")
+        lanternFlag = 0
+        playerArr.shift()
+        playerArr.push(0)
+        clickCount++
+        printMessage(clickCount + "\n" + playerArr)
+        signal()
+    } else if(lanternFlag == 0) {
+        playerArr.shift()
+        playerArr.push(0)
+        clickCount++
+        printMessage(clickCount + "\n" + playerArr)
+        signal()
+    }
+}
+
+_roof_top_one.lanternOff.onClick = function(){
+    _roof_top_one.on_button.obj.show()
+    _roof_top_one.off_button.obj.show()
+}
+
+    // 헬리콥터 탈출
+_roof_top_one.helicopter = new obj(_roof_top_one, "helicopter", "helicopter.png", 500, 1000, 360)
 _roof_top_one.helicopter.obj.hide()
+_roof_top_one.helicopter.onClick = function(){ 
+    printMessage("헬리콥터를 타고 탈출에 성공했습니다!")
+    game.clear()}
+
+
 _roof_top_one.helicopter.onClick = function(){ game.clear() }
 
 //=============================================================================================
