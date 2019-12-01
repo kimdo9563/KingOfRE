@@ -477,6 +477,7 @@ fps.prototype.onClick = function(){
         _3rd_floor_three.dark_portal.obj.show()
     }
 }
+_3rd_floor_one.down_arrow = new arrow(_3rd_floor_one, "down_arrow", _elevator, 100, 640, 650)
 
 _3rd_floor_one.health_door = new empty_box(_3rd_floor_one,"health_door",450,600,400,_3rd_floor_two) //문에 투명 공간
 _3rd_floor_one.health_door.obj.hide()
