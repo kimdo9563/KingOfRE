@@ -1,10 +1,10 @@
 ﻿/*
 ============================================================================================
-|   객체지향 프로그래밍 - 팀 프로젝트
-|   << Game Name >>
-|   X 조
-|   조원 : 김도형, 김혁민, 윤영배, 이우성
-|   wiki : https://github.com/kimdo9563/KingOfRE/wiki/API-%EB%A6%AC%EC%8A%A4%ED%8A%B8
+|                               객체지향 프로그래밍 - 팀 프로젝트
+|                                       << Game Name >>
+|          9 조
+|          조원 : 김도형, 김혁민, 윤영배, 이우성
+|          wiki : https://github.com/kimdo9563/KingOfRE/wiki/API-%EB%A6%AC%EC%8A%A4%ED%8A%B8
 ============================================================================================
 */
 
@@ -84,6 +84,7 @@ function player_control() {
     life_change_image   :   change 메소드에 따른, 라이프 이미지 변경(Do NOT use directly)
 
     stamina_create      :   UI에 기력 생성
+    stamina_change      :   기력 변경(eg. 스킬 사용, 회복 아이템 사용 시)
 
     money_create        :   UI에 소지금 생성
     money_change        :   소지금 변경(eg.상점 이용, 플레어 사망 시)
@@ -306,7 +307,7 @@ _boss_room_3 = game.createRoom("boss_room_3","background.png")
 _roof_top_one = game.createRoom("_roof_top_one", "헬기장.jpg")
 _roof_top_two = game.createRoom("_roof_top_two", "_elevator_room.jpg")
 
-// 라이프와, 소지금이 보이길 원하는 방을 생성하면, room_list 배열에 동기화 필수!
+// 라이프, 소지금, 퀘스트, 기력 등이 보이길 원하는 방을 생성하면, room_list 배열에 동기화 필수!
 var room_list = new Array(
     _battle_field,
     _1st_floor_one,
@@ -411,6 +412,7 @@ _battle_field.button_skill.onClick = function () {
 _battle_field.zombie = new zombie(_battle_field, "_battle_field.zombie","empty_box.png", 200, 1000, 230, 0, 0);
 
 
+
 //==========================================================================================
 /* 1st floor */
 
@@ -436,7 +438,6 @@ _1st_floor_one.shutter.onDrag = function(direction) {
 }
 
 
-
 _1st_floor_two.left_arrow = new arrow(_1st_floor_two, "left_arrow", _1st_floor_one, 100, 100, 360)
 _1st_floor_two.right_arrow = new arrow(_1st_floor_two, "right_arrow", _1st_floor_three, 100, 1200, 360)
 
@@ -454,9 +455,6 @@ _1st_floor_three.left_arrow = new arrow(_1st_floor_three, "left_arrow", _1st_flo
 
 _1st_floor_three.elevator = new obj(_1st_floor_three, "elevator", "silver_button.png", 60, 800, 360)
 _1st_floor_three.elevator.onClick = function() {game.move(_elevator)}
-
-
-
 
 
 //=============================================================================================
