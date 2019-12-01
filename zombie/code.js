@@ -68,6 +68,7 @@ function player_control() {
     // var Player = player_control();
 
     this.life = 0;
+    this.stamina = 0;
     this.money = 0;
     this.quest_index = 1;
     this.quest_message = "퀘스트가 없습니다 !";
@@ -82,6 +83,8 @@ function player_control() {
     life_change         :   라이프 변경(eg.공격을 받거나, 회복 아이템 사용 시)
     life_change_image   :   change 메소드에 따른, 라이프 이미지 변경(Do NOT use directly)
 
+    stamina_create      :   UI에 기력 생성
+
     money_create        :   UI에 소지금 생성
     money_change        :   소지금 변경(eg.상점 이용, 플레어 사망 시)
 
@@ -92,7 +95,7 @@ function player_control() {
 player_control.prototype.life_create = function() {
     for (var i = 0; i < room_list.length; i++){
         room = room_list[i];
-        room.life = new obj(room, "life", "life_5.png", 300, 860, 50);
+        room.life = new obj(room, "life", "life_5.png", 300, 800, 50);
         room.life.onClick = function(){printMessage("HP : "+Player.life)}
     }
 }
@@ -100,6 +103,7 @@ player_control.prototype.life_change = function(change_life_amount) {
     var changed_life = this.life + change_life_amount;
 
     if (changed_life <= 0) {game.gameover()}  // 라이프가 0이하면 게임오버
+    if (changed_life > 100) {throw "체력이 초과하여 회복될 수 없습니다."}
 
     if (Math.floor(this.life/10) != Math.floor(changed_life/10)) {
     //자릿수가 바뀔 경우에만 실행
@@ -115,6 +119,19 @@ player_control.prototype.life_change_image = function(change_to_life_image) {
     for(var i = 0; i < room_list.length; i++) {
         room = room_list[i];
         room.life.obj.setSprite(change_to_life_image)}
+}
+
+player_control.prototype.stamina_create = function() {
+    for (var i = 0; i < room_list.length; i++){
+        room = room_list[i];
+        room.stamina = new obj(room, "stamina", "stamina.png", 50, 990, 50);
+        room.stamina.onClick = function(){printMessage("Stamina : "+Player.stamina)}
+    }
+}
+player_control.prototype.stamina_change = function(change_stamina_amount) {
+    if(this.stamina + change_stamina_amount < 0) {throw "기력이 부족합니다."}
+    if (this.stamina + change_stamina_amount > 50) {throw "기력이 초과하여 회복될 수 없습니다."}
+    this.stamina += change_stamina_amount;
 }
 
 player_control.prototype.money_create = function() {
@@ -218,7 +235,26 @@ function weapon(room, name, image, width, x_loc, y_loc, damage, skill_name, skil
 weapon.prototype = Object.create(obj.prototype)
 weapon.prototype.constructor = weapon;
 weapon.prototype.onClick = function () {
-    if(Player.money > this.cost) { this.obj.pick(); Player.money_change(0-this.cost) }
+    if(Player.money >= this.cost) { this.obj.pick(); Player.money_change(0-this.cost) }
+    else{printMessage("돈이 부족하다 !!")}
+}
+
+function item(room, name, image, width, x_loc, y_loc, cost, effect) {
+    obj.call(this, room, name, image, width, x_loc, y_loc);
+
+    this.cost = cost;
+    this.effect = effect;
+}
+item.prototype = Object.create(obj.prototype)
+item.prototype.constructor = item;
+item.prototype.onClick = function () {
+    if(Player.money >= this.cost) {
+        try {
+        this.effect();
+        Player.money_change(0-this.cost)
+        printMessage("회복되었습니다 !\n"+"현재 체력"+Player.life+"  현재 기력 : "+Player.stamina)
+        } catch(e) { printMessage(e) }
+        }
     else{printMessage("돈이 부족하다 !!")}
 }
 
@@ -290,6 +326,9 @@ var Player = new player_control();
 Player.life_create()
 Player.life_change(100)
 
+Player.stamina_create()
+Player.stamina_change(50)
+
 Player.money_create()
 Player.money_change(500)
 
@@ -305,6 +344,9 @@ _shop_itemlist.weapon_axe = new weapon(_shop_itemlist, "weapon_axe", "weapon_axe
 _shop_itemlist.weapon_chainsaw = new weapon(_shop_itemlist, "weapon_chainsaw", "weapon_chainsaw.png", 100, 230, 190, 15, "텍사스의 추억", 30, 200)
 _shop_itemlist.weapon_lightsaber = new weapon(_shop_itemlist, "weapon_lightsaber", "weapon_lightsaber.png", 140, 370, 190, 20, "일격필살", 40, 400)
 _shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "weapon_railgun.png", 100, 510, 190, 25, "정조준 일격", 9999, 1000)
+
+_shop_itemlist.lamb_sticks = new item(_shop_itemlist, "lamb_sticks", "lamb_sticks.png", 90, 1060, 450, 50, function() {Player.life_change(30)})
+_shop_itemlist.tsingtao = new item(_shop_itemlist, "tsingtao", "tsingtao.png", 30, 1200, 460, 50, function() {Player.stamina_change(50)} )
 
 
 //==========================================================================================
@@ -351,7 +393,7 @@ _battle_field.button_attack.onClick = function () {
 _battle_field.button_skill.onClick = function () {
     try {
         Player.weapon();
-
+        Player.stamina_change(-10)
         _battle_field.zombie.life -= Player.skill_damage;
         Player.life_change(0-_battle_field.zombie.damage);
         printMessage("필살 !"+Player.skill_name+" !!\n"+"남은 HP("+Player.life+") 좀비 HP("+_battle_field.zombie.life+")")
@@ -362,7 +404,7 @@ _battle_field.button_skill.onClick = function () {
             original_zombie.obj.hide();
         }
     } catch(e) {
-        printMessage("무기를 들고 덤비자")
+        printMessage(e)
     }
 }
 
@@ -403,12 +445,10 @@ _1st_floor_two.zombie.onClick = function() {
     if(_1st_floor_two.zombie.flag != true) {
         printMessage("??? : 아직 낯설테니.. 간단한 도움을 주도록 하지")
         showImageViewer("tutorial2.png");
-        _1st_floor_one.zombie.flag = true;
+        _1st_floor_two.zombie.flag = true;
     }
     battle(_1st_floor_two, _1st_floor_two.zombie)
 }
-
-
 
 _1st_floor_three.left_arrow = new arrow(_1st_floor_three, "left_arrow", _1st_floor_two, 100, 100, 360)
 
