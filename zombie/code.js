@@ -22,13 +22,16 @@ function obj(room, name, image, width, x_loc, y_loc) {
 // ==============================
 // |       Room UI Function     |
 // ==============================
-function arrow(room, name, go_to_room) {
+
+function arrow(room, name, go_to_room, width, x_loc, y_loc) {
     if (name == "left_arrow") {
-        obj.call(this, room, name, "left_arrow.png", 150, 100, 360)
+        obj.call(this, room, name, "left_arrow.png", width, x_loc, y_loc)  //150, 100, 360
     } else if (name == "right_arrow") {
-        obj.call(this, room, name, "right_arrow.png", 150, 1200, 360)
+        obj.call(this, room, name, "right_arrow.png", width, x_loc, y_loc)  //150, 1200, 360
     } else if (name == "down_arrow") {
-        obj.call(this, room, name, "down_arrow.png", 200, 640, 650)
+        obj.call(this, room, name, "down_arrow.png", width, x_loc, y_loc)  //200, 640, 650
+    } else if (name == "up_arrow") {
+        obj.call(this, room, name, "up_arrow.png", width, x_loc, y_loc)  //200, 640, 650
     }
     this.go_to_room = go_to_room;
 }
@@ -54,8 +57,6 @@ function battle(come_to_room, enemy){
 
     game.move(_battle_field)
 }
-    //room, name, image, width, x_loc, y_loc, life, damage
-
 
 // ==============================
 // |       Player Function      |
@@ -74,9 +75,16 @@ function player_control() {
 }
     /*
     // Prototype Description
-    create         :   UI에 하트 생성
-    change         :   라이프 변경(eg.공격을 받거나, 회복 아이템 사용 시)
-    change_image   :   change 메소드에 따른, 라이프 이미지 변경(Do NOT use directly)
+    life_create         :   UI에 하트 생성
+    life_change         :   라이프 변경(eg.공격을 받거나, 회복 아이템 사용 시)
+    life_change_image   :   change 메소드에 따른, 라이프 이미지 변경(Do NOT use directly)
+
+    money_create        :   UI에 소지금 생성
+    money_change        :   소지금 변경(eg.상점 이용, 플레어 사망 시)
+
+    weapon              :   호출 시마다, 손에 장착한 무기를 바탕으로, 플레이어 스탯 정보 갱신
+
+    quest_create        :   UI에 퀘스트 생성
     */
 player_control.prototype.life_create = function() {
     for (var i = 0; i < room_list.length; i++){
@@ -105,11 +113,7 @@ player_control.prototype.life_change_image = function(change_to_life_image) {
         room = room_list[i];
         room.life.obj.setSprite(change_to_life_image)}
 }
-    /*
-    // Prototype Description
-    create         :   UI에 소지금 생성
-    change         :   소지금 변경(eg.상점 이용, 플레어 사망 시)
-    */
+
 player_control.prototype.money_create = function() {
     for (var i = 0; i < room_list.length; i++){
             room = room_list[i];
@@ -148,10 +152,7 @@ player_control.prototype.weapon = function() {
         }
     else {throw "무기를 들고 오자."}
 }
-    /*
-    // Prototype Description
-    create         :   UI에 퀘스트 생성
-    */
+
 player_control.prototype.quest_create = function() {
     for (var i = 0; i < room_list.length; i++){
             room = room_list[i];
@@ -160,13 +161,9 @@ player_control.prototype.quest_create = function() {
     }
 }
 
-
-/*
-=====================
-|    객체 관련 Func
-|
-=====================
-*/
+// ==============================
+// |     NPC, etc.. Function    |
+// ==============================
 
 function shopNPC() {
     this.create()
@@ -297,7 +294,7 @@ Player.money_change(500)
 Player.quest_create()
 
 //Shop NPC Initialize
-Shop_NPC = new shopNPC();
+var Shop_NPC = new shopNPC();
 
 // weapon initialize
 // room, name, image, x_loc, y_loc, damage, skill_name, skill_damage
@@ -324,7 +321,7 @@ _elevator_button._roof_top = new empty_box(_elevator_button, "_roof_top", 60, 58
 //==========================================================================================
 /* Battle Field */
 
-var original_zombie;
+var original_zombie;  //좀비를 처치 시, 원래 위치의 좀비를 hide 하기 위한 용도
 
 _battle_field.button_attack = new empty_box(_battle_field, "button_attack", 100, 380, 500)
 _battle_field.button_skill = new empty_box(_battle_field, "button_skill", 100, 380, 620)
@@ -371,12 +368,12 @@ _battle_field.zombie = new zombie(_battle_field, "_battle_field.zombie","empty_b
 //==========================================================================================
 /* 1st floor */
 
-_1st_floor_one.right_arrow = new arrow(_1st_floor_one, "right_arrow", _1st_floor_two)
+_1st_floor_one.right_arrow = new arrow(_1st_floor_one, "right_arrow", _1st_floor_two, 150, 1200, 360)
 
-_1st_floor_two.left_arrow = new arrow(_1st_floor_two, "left_arrow", _1st_floor_one)
-_1st_floor_two.right_arrow = new arrow(_1st_floor_two, "right_arrow", _1st_floor_three)
+_1st_floor_two.left_arrow = new arrow(_1st_floor_two, "left_arrow", _1st_floor_one, 150, 100, 360)
+_1st_floor_two.right_arrow = new arrow(_1st_floor_two, "right_arrow", _1st_floor_three, 150, 1200, 360)
 
-_1st_floor_three.left_arrow = new arrow(_1st_floor_three, "left_arrow", _1st_floor_two)
+_1st_floor_three.left_arrow = new arrow(_1st_floor_three, "left_arrow", _1st_floor_two, 150, 100, 360)
 
 _1st_floor_three.elevator = new obj(_1st_floor_three, "elevator", "_elevator.png", 100, 800, 360)
 _1st_floor_three.elevator.onClick = function () { game.move(_elevator) }
@@ -392,7 +389,7 @@ _1st_floor_one.zombie2 = new zombie(_1st_floor_one, "zombie2", "3층좀비_1.png
 //=============================================================================================
 /* 2nd floor OR NPC */
 
-_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator)
+_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator, 200, 640, 650)
 
 _shop_itemlist.exit_button = new obj(_shop_itemlist, "exit_button", "button_exit.png", 100, 1200, 680)
 _shop_itemlist.exit_button.onClick = function(){ game.move( _2nd_floor_one) }
@@ -497,8 +494,8 @@ _3rd_floor_two.brain.onClick = function(){
     _3rd_floor_three._3rd_zombie_9.obj.show()
     _3rd_floor_three._3rd_zombie_10.obj.show()
 }
-_3rd_floor_two.right_arrow = new arrow(_3rd_floor_two,"right_arrow",_3rd_floor_three)
-_3rd_floor_three.left_arrow = new arrow(_3rd_floor_three,"left_arrow",_3rd_floor_two)
+_3rd_floor_two.right_arrow = new arrow(_3rd_floor_two,"right_arrow",_3rd_floor_three, 150, 1200, 360)
+_3rd_floor_three.left_arrow = new arrow(_3rd_floor_three,"left_arrow",_3rd_floor_two, 150, 100, 360)
 
 game.setGameoverMessage("좀비에게 물어뜯겼습니다..")
 
@@ -511,10 +508,10 @@ _3rd_floor_three.dark_portal.onClick = function(){
 //=============================================================================================
 /* 4th floor */
 
-_4th_floor_one.right_arrow = new arrow(_4th_floor_one, "right_arrow", _4th_floor_two)
-_4th_floor_one.left_arrow = new arrow(_4th_floor_one, "left_arrow", _4th_floor_three)
-_4th_floor_two.left_arrow = new arrow(_4th_floor_two, "left_arrow", _4th_floor_one)
-_4th_floor_three.right_arrow = new arrow(_4th_floor_three, "right_arrow", _4th_floor_one)
+_4th_floor_one.right_arrow = new arrow(_4th_floor_one, "right_arrow", _4th_floor_two, 150, 1200, 360)
+_4th_floor_one.left_arrow = new arrow(_4th_floor_one, "left_arrow", _4th_floor_three, 150, 100, 360)
+_4th_floor_two.left_arrow = new arrow(_4th_floor_two, "left_arrow", _4th_floor_one, 150, 100, 360)
+_4th_floor_three.right_arrow = new arrow(_4th_floor_three, "right_arrow", _4th_floor_one, 150, 1200, 360)
 _4th_floor_three.elevator = new obj(_4th_floor_three, "elevator", "silver_button.png", 60, 800, 360)
 _4th_floor_three.elevator.onClick = function () { game.move(_elevator)}
 
@@ -522,10 +519,10 @@ _4th_floor_three.elevator.onClick = function () { game.move(_elevator)}
 var zombieFlag = 0
 var playerFlag = 0
 
-_4th_floor_two.up_arr = new obj(_4th_floor_two, "up_arr", "up_arrow.png", 200, 600, 500)
-_4th_floor_two.down_arr = new obj(_4th_floor_two, "down_arr", "down_arrow.png", 200, 600, 700)
-_4th_floor_two.left_arr = new obj(_4th_floor_two, "left_arr", "left_arrow.png", 200, 500, 600)
-_4th_floor_two.right_arr = new obj(_4th_floor_two, "right_arr", "right_arrow.png", 200, 700, 600)
+_4th_floor_two.up_arrow = new arrow(_4th_floor_two, "up_arrow", "up_arrow.png", 200, 600, 500)
+_4th_floor_two.down_arrow = new arrow(_4th_floor_two, "down_arrow", "down_arrow.png", 200, 600, 700)
+_4th_floor_two.left_arrow = new arrow(_4th_floor_two, "left_arrow", "left_arrow.png", 200, 500, 600)
+_4th_floor_two.right_arrow = new arrow(_4th_floor_two, "right_arrow", "right_arrow.png", 200, 700, 600)
 
 function dbdb(zombieFlag, playerFlag){
     zombieFlag = Math.floor(Math.random()*10)
@@ -732,8 +729,8 @@ _boss_room_3.boss = new keypad(_boss_room_3,"boss","근육좀비_1.png",400,600,
 //=============================================================================================
 
 /* roof_top */ // 신호를 주면 헬리콥터 show. 헬리콥터 onClick 탈출 성공
-_roof_top_one.left_arrow = new arrow(_roof_top_one, "left_arrow", _roof_top_two)
-_roof_top_two.right_arrow = new arrow(_roof_top_two, "right_arrow", _roof_top_one)
+_roof_top_one.left_arrow = new arrow(_roof_top_one, "left_arrow", _roof_top_two, 150, 100, 360)
+_roof_top_two.right_arrow = new arrow(_roof_top_two, "right_arrow", _roof_top_one, 150, 1200, 360)
 _roof_top_two.elevator = new obj(_roof_top_two, "elevator", "silver_button.png", 60, 800, 360)
 _roof_top_two.elevator.onClick = function () { game.move(_elevator) }
 
@@ -744,7 +741,8 @@ _roof_top_one.helicopter.onClick = function(){ game.clear() }
 
 //=============================================================================================
 //꼭 맨 뒤에 선언, 아이템 선언이 먼저 나오므로
-/*var quest_list = {
+/*
+var quest_list = {
     1: {
         "name": "김혁민 탈주사건!\n\n",
         "object": _2nd_floor_one.test_item.obj,
@@ -757,6 +755,7 @@ _roof_top_one.helicopter.onClick = function(){ game.clear() }
         "description": "그래! 김혁민이는 잘 잡아왔구만...\n"+"하지만 말야, 다른 문제가 생겼어..",
         "flag": 0
     }
-}*/
+}
+*/
 
 game.start(_1st_floor_one)
