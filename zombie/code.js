@@ -49,6 +49,19 @@ empty_box.prototype = Object.create(obj.prototype);
 empty_box.prototype.constructor = empty_box;
 empty_box.prototype.onClick = function () {game.move(this.go_to_room)}
 
+/*
+function elevator_button(room, name, width, x_loc, y_loc, go_to_room){
+	obj.call(this, room, name, "empty_box.png", width, x_loc, y_loc)
+	this.go_to_room = go_to_room;
+}
+elevator_button.prototype = Object.create(obj.prototype);
+elevator_button.prototype.constructor = elevator_button;
+elevator_button.prototype.onClick = function(){
+	playSound("elevator.wav")
+	gmae.move(this.go_to_room)
+	}
+*/
+
 function battle(come_to_room, enemy){
     original_zombie = enemy;
     _battle_field.button_exit.onClick = function() {game.move(come_to_room); }
@@ -375,11 +388,35 @@ _elevator.button_2 = new empty_box(_elevator, "button_2", 80, 1040, 485, _elevat
 _elevator.button_3 = new empty_box(_elevator, "button_3", 80, 1040, 550, _elevator_button)
 _elevator.button_4 = new empty_box(_elevator, "button_4", 80, 1040, 590, _elevator_button)
 _elevator_button._1st_floor = new empty_box(_elevator_button, "_1st_floor", 60, 730, 540, _1st_floor_three)
+_elevator_button._1st_floor.onClick = function() {
+	printMessage("1층 입니다.")
+	playSound("elevator.wav")
+	game.move(this.go_to_room)
+}
 _elevator_button._2nd_floor = new empty_box(_elevator_button, "_2nd_floor", 60, 565, 420, _2nd_floor_one)
+_elevator_button._2nd_floor.onClick = function() {
+	printMessage("2층 입니다.")
+	playSound("elevator.wav")
+	game.move(this.go_to_room)
+}
 _elevator_button._3rd_floor = new empty_box(_elevator_button, "_3rd_floor", 60, 730, 420, _3rd_floor_one)
+_elevator_button._3rd_floor.onClick = function() {
+	printMessage("3층 입니다.")
+	playSound("elevator.wav")
+	game.move(this.go_to_room)
+}
 _elevator_button._4th_floor = new empty_box(_elevator_button, "_4th_floor", 60, 565, 300, _4th_floor_one)
-_elevator_button._5th_floor = new empty_box(_elevator_button, "_5th_floor", 60, 730, 300, _5th_floor_one)
+_elevator_button._4th_floor.onClick = function() {
+	printMessage("4층 입니다.")
+	playSound("elevator.wav")
+	game.move(this.go_to_room)
+}
 _elevator_button._roof_top = new empty_box(_elevator_button, "_roof_top", 60, 730, 170, _roof_top_one)
+_elevator_button._roof_top.onClick = function() {
+	printMessage("옥상 입니다.")
+	playSound("elevator.wav")
+	game.move(this.go_to_room)
+}
 
 //==========================================================================================
 /* Battle Field */
@@ -394,12 +431,14 @@ _battle_field.button_exit = new empty_box(_battle_field, "button_exit", 100, 100
 
 _battle_field.button_attack.onClick = function () {
     try {
+		playSound("zombie_hit.wav")
         Player.weapon();
         _battle_field.zombie.life -= Player.damage;
         Player.life_change(0-_battle_field.zombie.damage);
         printMessage("아다다다다 !\n"+"남은 HP("+Player.life+") 좀비 HP("+_battle_field.zombie.life+")");
 
         if(_battle_field.zombie.life <= 0) {
+			playSound("zombie_die.wav")
             printMessage("좀비를 무찔렀다!")
             _battle_field.button_exit.onClick()
             original_zombie.obj.hide();
@@ -411,6 +450,22 @@ _battle_field.button_attack.onClick = function () {
 
 _battle_field.button_skill.onClick = function () {
     try {
+		if(_1st_floor_two.weapon_branch.obj.isPicked()){
+			playSound("branch.wav")
+		} 
+		else if(_shop_itemlist.weapon_axe.obj.isPicked()){
+			playSound("axe.wav")
+		} 
+		else if(_shop_itemlist.weapon_chainsaw.obj.isPicked()){
+			playSound("chainsaw.wav")
+		}
+		else if(_shop_itemlist.weapon_lightsaber.obj.isPicked()){
+			playSound("lightsaber.wav")
+		}
+		//else if(_shop_itemlist.weapon_railgun.obj.isPicked()){
+		//	playSound("railgun.wav")
+		//}
+
         Player.weapon();
         Player.stamina_change(-10)
         _battle_field.zombie.life -= Player.skill_damage;
@@ -418,6 +473,7 @@ _battle_field.button_skill.onClick = function () {
         printMessage("필살 !"+Player.skill_name+" !!\n"+"남은 HP("+Player.life+") 좀비 HP("+_battle_field.zombie.life+")")
 
         if(_battle_field.zombie.life <= 0) {
+			playSound("zombie_die.wav")
             printMessage("좀비를 무찔렀다!")
             _battle_field.button_exit.onClick();
             original_zombie.obj.hide();
@@ -436,6 +492,7 @@ _1st_floor_one.shutter = new empty_box(_1st_floor_one, "shutter", 360, 730, 200)
 _1st_floor_one.shutter.obj.setSprite("empty_box2.png")
 _1st_floor_one.shutter.onDrag = function(direction) {
     if(direction=="Down" && _1st_floor_one.shutter.obj.move != 1) {
+		playSound("shutter_door_.wav")
         _1st_floor_one.shutter.obj.moveY(220)
         _1st_floor_one.shutter.obj.move = 1;
         _1st_floor_one.shutter.obj.setSprite("shutter.png")
@@ -447,6 +504,7 @@ _1st_floor_one.shutter.onDrag = function(direction) {
                 _1st_floor_one.right_arrow.flag = true;
             }
             game.move(_1st_floor_two)
+			playSound("zombie.wav")
         }
         Player.quest_clear();
         printMessage("휴.. 일단 저 무서운 얼굴은 보이지 않게 되었군.")
