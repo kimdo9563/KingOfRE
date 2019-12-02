@@ -357,6 +357,7 @@ _shop_itemlist.weapon_axe = new weapon(_shop_itemlist, "weapon_axe", "weapon_axe
 _shop_itemlist.weapon_chainsaw = new weapon(_shop_itemlist, "weapon_chainsaw", "weapon_chainsaw.png", 100, 230, 190, 15, "텍사스의 추억", 30, 200)
 _shop_itemlist.weapon_lightsaber = new weapon(_shop_itemlist, "weapon_lightsaber", "weapon_lightsaber.png", 140, 370, 190, 20, "일격필살", 40, 400)
 _shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "weapon_railgun.png", 100, 510, 190, 25, "정조준 일격", 9999, 1000)
+_shop_itemlist.weapon_railgun.obj.pick()
 
 _shop_itemlist.lamb_sticks = new item(_shop_itemlist, "lamb_sticks", "lamb_sticks.png", 90, 1060, 450, 50, function() {Player.life_change(30)})
 _shop_itemlist.tsingtao = new item(_shop_itemlist, "tsingtao", "tsingtao.png", 30, 1200, 460, 50, function() {Player.stamina_change(50)} )
@@ -444,9 +445,9 @@ _battle_field.button_skill.onClick = function () {
 		else if(_shop_itemlist.weapon_lightsaber.obj.isPicked()){
 			playSound("lightsaber.wav")
 		}
-		//else if(_shop_itemlist.weapon_railgun.obj.isPicked()){
-		//	playSound("railgun.wav")
-		//}
+		else if(_shop_itemlist.weapon_railgun.obj.isPicked()){
+			playSound("railgun.wav")
+		}
 
         Player.weapon();
         Player.stamina_change(-10)
