@@ -1429,8 +1429,18 @@ var quest_list = {
         "\n\nQUEST:5층 사냥터에 가서 좀비 20마리를 사냥하세요.",
         "flag": 0
     }
+    6: {
+        "name": "Q5. 이거... RPG 게임이야..?\n\n",
+        "object" : "_5th_floor_one_kill_counter == 20",
+        "description": "아! 그러고보니, 부탁을 하나 해도 될까? 5층은 강당인데, 내가 그곳에\n물건 재고를 쌓아뒀거든.."+
+        "그런데, 직원들이 전부 좀비로 변하는 바람에\n좀비소굴로 변해버렸어. 네가 그 녀석들 조금 처리해줬으면 좋겠어. 아!\n\n"+
+        "그리고 한 가지 좋은 팁을 주자면, 그곳의 좀비들은 너에게 돈을 줄 수도\n있을거야. 또, 그 좀비들은 무한히 나오는 것 같아"+
+        "\n\nQUEST:5층 사냥터에 가서 좀비 20마리를 사냥하세요.",
+        "flag": 0
+    }
 }
 
+Player.quest_check();
 game.makeCombination(_5th_floor_three.potion.obj,_4th_floor_two.zombie_heart.obj,_5th_floor_three.monster_heart)
-game.start(_2nd_floor_one)
+game.start(_building_outside)
 game.printMessage("허억,,, 헉,,, 얼른 저 앞에 보이는 건물로 들어가자!!")
