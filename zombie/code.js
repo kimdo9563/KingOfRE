@@ -293,6 +293,8 @@ zombie.prototype.onClick = function() {
 // ========================================================================================
 /* Initialize Room & Player Setting & Item Setting */
 
+_building_outside = game.createRoom("_building_outside", "_building_outside.png")
+
 _elevator = game.createRoom("_elevator", "_elevator.png");
 _elevator_button = game.createRoom("_elevator_button", "_elevator_button.png")
 
@@ -301,7 +303,7 @@ _shop_itemlist = game.createRoom("_shop_itemlist", "_shop_itemlist.png")
 _battle_field = game.createRoom("_battle_field", "_battle_field.png")
 _battle_field_boss = game.createRoom("_battle_field_boss","_battle_field.png")
 
-_1st_floor_one = game.createRoom("_1st_floor_one", "background.png"); // 방 생성
+_1st_floor_one = game.createRoom("_1st_floor_one", "background1.png"); // 방 생성
 _1st_floor_two = game.createRoom("_1st_floor_two", "_1st_floor_two.jpg");
 _1st_floor_three = game.createRoom("_1st_floor_three", "_elevator_room.jpg");
 
@@ -379,6 +381,11 @@ _shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "we
 _shop_itemlist.lamb_sticks = new item(_shop_itemlist, "lamb_sticks", "lamb_sticks.png", 90, 1060, 450, 50, function() {Player.life_change(30)})
 _shop_itemlist.tsingtao = new item(_shop_itemlist, "tsingtao", "tsingtao.png", 30, 1200, 460, 50, function() {Player.stamina_change(50)} )
 
+//==========================================================================================
+/* building_outside */
+
+_building_outside.building = new obj(_building_outside, "building", "building_outside1.png", 400, 1100, 250)
+_building_outside.building.onClick = function(){game.move(_1st_floor_one)}
 
 //==========================================================================================
 /* elevator */
@@ -463,9 +470,9 @@ _battle_field.button_skill.onClick = function () {
 		else if(_shop_itemlist.weapon_lightsaber.obj.isPicked()){
 			playSound("lightsaber.wav")
 		}
-		//else if(_shop_itemlist.weapon_railgun.obj.isPicked()){
-		//	playSound("railgun.wav")
-		//}
+		else if(_shop_itemlist.weapon_railgun.obj.isPicked()){
+			playSound("railgun.wav")
+		}
 
         Player.weapon();
         Player.stamina_change(-10)
@@ -488,7 +495,7 @@ _battle_field.zombie = new zombie(_battle_field, "_battle_field.zombie","empty_b
 
 //==========================================================================================
 /* 1st floor */
-
+_1st_floor_one.setRoomLight(0.5)
 _1st_floor_one.shutter = new empty_box(_1st_floor_one, "shutter", 360, 730, 200)
 _1st_floor_one.shutter.obj.setSprite("empty_box2.png")
 _1st_floor_one.shutter.onDrag = function(direction) {
@@ -1173,4 +1180,5 @@ var quest_list = {
 }
 
 
-game.start(_boss_room_2)
+game.start(_building_outside)
+game.printMessage("허억,,, 헉,,, 얼른 저 앞에 보이는 건물로 들어가자!!")
