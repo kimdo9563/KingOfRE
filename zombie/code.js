@@ -501,18 +501,16 @@ _battle_field.button_skill.onClick = function () {
 _battle_field.zombie = new zombie(_battle_field, "_battle_field.zombie","empty_box.png", 200, 1000, 230, 0, 0);
 
 //==========================================================================================
-/* BOSS - Battle Field */
-
-//==========================================================================================
 /* building_outside */
-var original_boss;  //좀비를 처치 시, 원래 위치의 좀비를 hide 하기 위한 용도
-var _battle_field_boss_flag = 0
-
 _building_outside.building = new obj(_building_outside, "building", "building_outside1.png", 400, 1100, 250)
 _building_outside.building.onClick = function(){
     game.move(_1st_floor_one)
     printMessage("후아.... 우선, 셔터를 내려 문을 차단하자")
 }
+//==========================================================================================
+/* BOSS - Battle Field */
+var original_boss;  //좀비를 처치 시, 원래 위치의 좀비를 hide 하기 위한 용도
+var _battle_field_boss_flag = 0
 
 _battle_field_boss.button_attack = new empty_box(_battle_field_boss, "button_attack", 150, 370, 510)
 _battle_field_boss.button_attack.obj.setSprite("empty_box3.png")
