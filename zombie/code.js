@@ -1317,7 +1317,5 @@ var quest_list = {
 
 }
 
-game.start(_boss_room_2); // 게임시작
-
 game.start(_building_outside)
 game.printMessage("허억,,, 헉,,, 얼른 저 앞에 보이는 건물로 들어가자!!")
