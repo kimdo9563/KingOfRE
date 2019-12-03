@@ -333,9 +333,9 @@ _5th_floor_three = game.createRoom("_5th_floor_three", "5층화장실.jpg")
 
 _boss_room_1 = game.createRoom("_boss_room_1", "dark_background.jpg"); // 방 생성
 _boss_room_2 = game.createRoom("_boss_room_2","보스방2.jpg")
-_boss_room_3 = game.createRoom("_boss_room_3","background.png")
-_boss_room_4 = game.createRoom("_boss_room_4","background.png")
-_boss_room_5 = game.createRoom("_boss_room_5","background.png")
+_boss_room_3 = game.createRoom("_boss_room_3","회장실.png")
+_boss_room_4 = game.createRoom("_boss_room_4","회장실.png")
+_boss_room_5 = game.createRoom("_boss_room_5","회장실.png")
 
 _roof_top_one = game.createRoom("_roof_top_one", "헬기장.jpg")
 _roof_top_two = game.createRoom("_roof_top_two", "_elevator_room.jpg")
@@ -558,8 +558,12 @@ _battle_field_boss.button_exit.onClick = function() {
         _battle_field_boss.button_skill.obj.show()
     }
     if(_battle_field_boss_flag == 3){
-        printMessage("휴...살았다")
-        game.move(_elevator)
+        if(bos_itemFlag == false){
+            printMessage("아이템을 습득해야합니다.")
+        } else if(bos_itemFlag == true){
+            printMessage("휴...살았다")
+            game.move(_elevator)
+        }
     }
     if(_battle_field_boss_flag == 0 || _battle_field_boss_flag == 2){printMessage("어딜 도망가!")}
 }
@@ -602,7 +606,11 @@ _battle_field_boss.item2.obj.hide()
 _battle_field_boss.item.onClick = function(){
     _battle_field_boss.item2.obj.pick()
     _battle_field_boss.item.obj.hide()
+    bos_itemFlag = true
 }
+var bos_itemFlag = false
+
+
 
 //==========================================================================================
 /* 1st floor */
@@ -1255,13 +1263,13 @@ _roof_top_one.on_button.onClick = function(){
         playerArr.shift()
         playerArr.push(1)
         clickCount++
-        printMessage(clickCount + "\n" + playerArr)
+        printMessage("Signal" + "\n" + playerArr)
         signal()
     } else if(lanternFlag == 1){
         playerArr.shift()
         playerArr.push(1)
         clickCount++
-        printMessage(clickCount + "\n" + playerArr)
+        printMessage("Signal" + "\n" + playerArr)
         signal()
     }
 }
@@ -1272,13 +1280,13 @@ _roof_top_one.off_button.onClick = function(){
         playerArr.shift()
         playerArr.push(0)
         clickCount++
-        printMessage(clickCount + "\n" + playerArr)
+        printMessage("Signal" + "\n" + playerArr)
         signal()
     } else if(lanternFlag == 0) {
         playerArr.shift()
         playerArr.push(0)
         clickCount++
-        printMessage(clickCount + "\n" + playerArr)
+        printMessage("Signal" + "\n" + playerArr)
         signal()
     }
 }
