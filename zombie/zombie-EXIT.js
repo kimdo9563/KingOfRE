@@ -698,10 +698,10 @@ _1st_floor_three.elevator.onClick = function() {game.move(_elevator)}
 //=============================================================================================
 /* 2nd floor OR NPC */
 
-_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator, 100, 640, 650)
+_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator, 100, 1200, 650)
 _2nd_floor_one.shopNPC = new obj(_2nd_floor_one, "shopNPC", "_shop_npc.png", 300, 880, 235)
 
-_2nd_floor_one.shop_select_window = new obj(_2nd_floor_one, "shop_select_window", "shop_select_window.png", 1000, 640, 580)
+_2nd_floor_one.shop_select_window = new obj(_2nd_floor_one, "shop_select_window", "shop_select_window.png", 1000, 600, 580)
 _2nd_floor_one.shop_select_window.obj.hide()
 
 _2nd_floor_one.shop_select_itemlist = new empty_box(_2nd_floor_one, "shop_select_itemlist", 100, 400, 540, _shop_itemlist)
@@ -890,12 +890,17 @@ _3rd_floor_three.dark_portal.onClick = function() {
         _3rd_floor_three.warning.obj.show()
         _3rd_floor_three.warning_yes.obj.show()
         _3rd_floor_three.warning_no.obj.show()
-        _2nd_floor_one.shopNPC.obj.hide()
+
     }
-  else {
-  _2nd_floor_one.shopNPC.obj.hide()
-  printMessage("뭐야.. 굉장히 기분 나쁜 기운이 흘러나오네.\n상점 아주머니에게 돌아가보자.")}
-}
+    else {
+        _2nd_floor_one.shopNPC.obj.hide()
+        _2nd_floor_one.diary.obj.show()
+        _2nd_floor_one.shop_select_window.obj.show()
+        _2nd_floor_one.shop_select_itemlist.obj.show()
+        _2nd_floor_one.shop_select_quest.obj.show()
+        printMessage("뭐야.. 굉장히 기분 나쁜 기운이 흘러나오네.\n상점 아주머니에게 돌아가보자.")
+        }
+    }
 
 _3rd_floor_three.dark_portal.obj.hide()
 
@@ -1508,7 +1513,7 @@ var quest_list = {
     },
     4: {
         "name": "Q4. 이거... RPG 게임이야..?\n\n",
-        "object" : "_5th_floor_one_kill_counter == 0",
+        "object" : "_5th_floor_one_kill_counter == 20",
         "description": "아! 그러고보니, 부탁을 하나 해도 될까? 5층은 강당인데, 내가 그곳에\n물건 재고를 쌓아뒀거든.."+
         "그런데, 직원들이 전부 좀비로 변하는 바람에\n좀비소굴로 변해버렸어. 네가 그 녀석들 조금 처리해줬으면 좋겠어. 아!\n\n"+
         "그리고 한 가지 좋은 팁을 주자면, 그곳의 좀비들은 너에게 '돈'을 줄 수도\n있을거야. 또, 그 좀비들은 '무한히' 나오는 것 같아"+
@@ -1524,7 +1529,7 @@ var quest_list = {
         "flag": 0
     },
     6: {
-        "name": "Q6. 헬창 좀비야 덤벼라!\n\n",
+        "name": "Q6. 우락부락 근육좀비야 덤벼라!\n\n",
         "object" : "_3rd_floor_one.chain.obj.isClosed()",
         "description": "뭐? 정말 그 요상한 게임을 하는 좀비가 있었단말야?\n흠... 어쩌면 유쾌하시던 조용진 부장님이 좀비로 변하신걸까..\n"
         +"아하하, 그건 그렇고, 요새 자꾸 우리 매점의 양꼬치 재고가 비는 것 같아..\n좀비나 사람이나 도둑질을 하는건지.. 휴...\n"+
@@ -1533,10 +1538,9 @@ var quest_list = {
     },
     7: {
         "name": "Q7. 사라진 아주머니와 정체불명의 쪽지!\n\n",
-        "object" : "true",
-        "description": "뭐? 정말 그 요상한 게임을 하는 좀비가 있었단말야?\n흠... 어쩌면 유쾌하시던 조용진 부장님이 좀비로 변하신걸까..\n"
-        +"아하하, 그건 그렇고, 요새 자꾸 우리 매점의 양꼬치 재고가 비는 것 같아..\n좀비나 사람이나 도둑질을 하는건지.. 휴...\n"+
-        "CCTV를 보니까 3층 즈음으로 도망가는 것을 봤어\n3층 조사를 부탁할게 !\n\nQUEST:도둑놈을 쫓아 3층을 조사해보자",
+        "object" : "false",
+        "description": "갑자기 상점아주머니가 어디로 사라지신걸까...?\n이 정체모를 일기장은 뭘 의미하는걸까..?\n"+
+        "....필요한 물건은 아주머니가 돌아오실지도 모르니 카운터 위에 올려놓자ㅎㅎ\n\nQUEST:사악한 느낌의 포탈과 일기장의 관계를 추리하자"  ,
         "flag": 0
     }
 }
@@ -1545,4 +1549,3 @@ Player.quest_check();
 game.makeCombination(_5th_floor_three.potion.obj,_4th_floor_two.zombie_heart.obj,_5th_floor_three.monster_heart)
 game.start(_building_outside)
 game.printMessage("허억,,, 헉,,, 얼른 저 앞에 보이는 건물로 들어가자!!")
-//game.start(_4th_floor_three)
