@@ -497,13 +497,7 @@ _battle_field.button_skill.onClick = function () {
 
 _battle_field.zombie = new zombie(_battle_field, "_battle_field.zombie","empty_box.png", 350, 640, 280, 0, 0);
 
-//==========================================================================================
-/* building_outside  */
-_building_outside.building = new obj(_building_outside, "building", "right_arrow.png", 100, 1200, 320)
-_building_outside.building.onClick = function(){
-    game.move(_1st_floor_one)
-    printMessage("후아.... 우선, 셔터를 내려 문을 차단하자")
-}
+
 //==========================================================================================
 /* BOSS - Battle Field */
 var original_boss;  //좀비를 처치 시, 원래 위치의 좀비를 hide 하기 위한 용도
@@ -626,12 +620,13 @@ var boss_itemFlag = false
 
 
 //==========================================================================================
-/* building_outside */
-_building_outside.building = new obj(_building_outside, "building", "building_outside1.png", 400, 1100, 250)
+/* building_outside  */
+_building_outside.building = new obj(_building_outside, "building", "right_arrow.png", 100, 1200, 320)
 _building_outside.building.onClick = function(){
     game.move(_1st_floor_one)
     printMessage("후아.... 우선, 셔터를 내려 문을 차단하자")
 }
+
 //==========================================================================================
 /* 1st floor */
 //_1st_floor_one.setRoomLight(0.5)
@@ -740,9 +735,9 @@ _2nd_floor_one.shopNPC.onClick = function() {
         message += "부족할거야.. 언제든지 내게오면 꽤 쓸만한 무기들을 제공해주지.\n"
         message += "그리고 방금 네가 먹은 양꼬치와 칭따오도 많이 있으니 자주 오렴.\n\n"
         message += "아.. 괴물놈들이 사라지고 쓸 여비는 필요하니 조금은 돈을 받아도 괜찮지?\n\n"
-        message += "뭐? 돈이 없다고? 크흠.... 좋아. 일단 너에게 500원을 줄테니 나중에 갚도록 해.\n\n"
-        message += "[SYSTEM] 500원을 획득하였습니다."
-        Player.money_change(500)
+        message += "뭐? 돈이 없다고? 크흠.... 좋아. 일단 너에게 150원을 줄테니 나중에 갚도록 해.\n\n"
+        message += "[SYSTEM] 150원을 획득하였습니다."
+        Player.money_change(150)
         Player.quest_check()
         game.printStory(message)
         _2nd_floor_one_flag = false;
@@ -1030,7 +1025,7 @@ _4th_floor_three.slot_machine.onClick = function() {
 }
 
 var slotArray = new Array(0, 0)
-_4th_floor_two.slot_machine_game.onClick = function(){
+_4th_floor_three.slot_machine_game.onClick = function(){
     if(Player.money > 30){
         slotArray[0] = Math.floor(Math.random()*10)
         slotArray[1] = Math.floor(Math.random()*10)
@@ -1057,8 +1052,8 @@ _4th_floor_two.slot_machine_game.onClick = function(){
     } else {
         printMessage("소지금이 부족합니다.")
     }
-    _4th_floor_two.slot_machine_game.obj.hide()
-    _4th_floor_two.slot_machine.obj.show()
+    _4th_floor_three.slot_machine_game.obj.hide()
+    _4th_floor_three.slot_machine.obj.show()
 }
 
 
@@ -1484,7 +1479,7 @@ var quest_list = {
     2: {
         "name": "Q2. 알 수 없는 위압감..\n\n",
         "object" : "game.getHandItem() == _1st_floor_two.weapon_branch.obj",
-        "description": "휴... 이게 무슨 일일까..?\n우선 이 곳을 좀 더 돌아보자.\n\n+QUEST:튜토리얼대로 나뭇가지를 주어 좀비를 물리치자.",
+        "description": "휴... 이게 무슨 일일까..?\n우선 이 곳을 좀 더 돌아보자.\n\nQUEST:튜토리얼대로 나뭇가지를 줏어 좀비를 물리치자.",
         "flag": 0
     },
     3: {
@@ -1523,5 +1518,5 @@ var quest_list = {
 
 Player.quest_check();
 game.makeCombination(_5th_floor_three.potion.obj,_4th_floor_two.zombie_heart.obj,_5th_floor_three.monster_heart)
-game.start(_3rd_floor_three)
+game.start(_building_outside)
 game.printMessage("허억,,, 헉,,, 얼른 저 앞에 보이는 건물로 들어가자!!")
