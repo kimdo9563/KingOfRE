@@ -374,7 +374,10 @@ _shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "we
 _shop_itemlist.lamb_sticks = new item(_shop_itemlist, "lamb_sticks", "lamb_sticks.png", 90, 1060, 450, 50, function() {Player.life_change(30)})
 _shop_itemlist.tsingtao = new item(_shop_itemlist, "tsingtao", "tsingtao.png", 30, 1200, 460, 50, function() {Player.stamina_change(50)} )
 
-
+// etc
+_5th_floor_three.monster_heart = _5th_floor_three.createObject("monster_heart","monster_heart.png")
+_5th_floor_three.monster_heart.hide()
+_5th_floor_three.monster_heart.setItemDescription("펄떡..펄떡..")
 //==========================================================================================
 /* elevator */
 
@@ -811,6 +814,8 @@ _3rd_floor_two._3rd_zombie_2 = new fps(_3rd_floor_two,"_3rd_zombie_2","3층좀�
 _3rd_floor_two._3rd_zombie_3 = new fps(_3rd_floor_two,"_3rd_zombie_3","3층좀비_3.png",120,randomLocationX(),randomLocationY())
 _3rd_floor_two._3rd_zombie_4 = new fps(_3rd_floor_two,"_3rd_zombie_4","3층좀비_4.png",130,randomLocationX(),randomLocationY())
 _3rd_floor_two._3rd_zombie_5 = new fps(_3rd_floor_two,"_3rd_zombie_5","3층좀비_5.png",140,randomLocationX(),randomLocationY())
+
+
 _3rd_floor_three._3rd_zombie_6 = new fps(_3rd_floor_three,"_3rd_zombie_6","3층좀비_1.png",150,randomLocationX(),randomLocationY())
 _3rd_floor_three._3rd_zombie_7 = new fps(_3rd_floor_three,"_3rd_zombie_7","3층좀비_2.png",150,randomLocationX(),randomLocationY())
 _3rd_floor_three._3rd_zombie_8 = new fps(_3rd_floor_three,"_3rd_zombie_8","3층좀비_3.png",150,randomLocationX(),randomLocationY())
@@ -820,14 +825,35 @@ _3rd_floor_three._3rd_zombie_10 = new fps(_3rd_floor_three,"_3rd_zombie_10","3�
 _3rd_floor_three.down_arrow = new arrow(_3rd_floor_three, "down_arrow", _elevator, 100, 640, 650)
 _3rd_floor_three.down_arrow.obj.hide()
 
-//포탈생성
-_3rd_floor_three.dark_portal = new obj(_3rd_floor_three,"dark_portal","dark_portal.png",400,550,400)
-_3rd_floor_three.dark_portal.onClick = function() {
+_3rd_floor_three.warning = new obj(_3rd_floor_three, "warning", "warning.png", 400, 1000, 340)
+_3rd_floor_three.warning_yes = new empty_box(_3rd_floor_three, "warning_yes", 100, 900, 530)
+_3rd_floor_three.warning_no = new empty_box(_3rd_floor_three, "warning_no", 100, 1100, 530)
+
+_3rd_floor_three.warning_yes.onClick = function() {
     game.move(_boss_room_1);
     printMessage("왼쪽 아래 생존자를\n우측의 방까지 이동시키세요")
     _3rd_floor_three.dark_portal.obj.hide()
     _2nd_floor_one.shopNPC.obj.hide() //상점 npc hide
 }
+_3rd_floor_three.warning.obj.hide()
+_3rd_floor_three.warning_yes.obj.hide()
+_3rd_floor_three.warning_no.obj.hide()
+
+//포탈생성
+_3rd_floor_three.dark_portal = new obj(_3rd_floor_three,"dark_portal","dark_portal.png",400,550,400)
+_3rd_floor_three.dark_portal.obj.close()
+_3rd_floor_three.dark_portal.onClick = function() {
+    if( (_3rd_floor_three.dark_portal.obj.isClosed() ) && (game.getHandItem() == _5th_floor_three.monster_heart) ) {
+        printMessage("심장의 박동소리가 점점 커지더니 포탈 속에서 알 수 없는 힘이 요동친다!!")
+        _3rd_floor_three.dark_portal.obj.open()
+    } else if (_3rd_floor_three.dark_portal.obj.isOpened() ) {
+        _3rd_floor_three.warning.obj.show()
+        _3rd_floor_three.warning_yes.obj.show()
+        _3rd_floor_three.warning_no.obj.show()
+    }
+  else {printMessage("뭐야.. 굉장히 기분 나쁜 기운이 흘러나오네.\n상점 아주머니에게 돌아가보자.")}
+}
+
 _3rd_floor_three.dark_portal.obj.hide()
 _3rd_floor_two.brain = new obj(_3rd_floor_two,"brain","fairy.png",500, 500, 400)
 _3rd_floor_two.start = new obj(_3rd_floor_two,"start","start_button.png",200,800,500)
@@ -893,6 +919,7 @@ function dbdb(zombieFlag, playerFlag){
     else if(zombieFlag<10){zombieFlag = 4}
 
     if(zombieFlag===playerFlag){
+        _4th_floor_two.db_zombie.obj.lock();
         _4th_floor_two.db_zombie.obj.hide()
         _4th_floor_two.zombie_heart.obj.show()
         printMessage("좀비를 물리치니 심장이 떨어졌다.")
@@ -1384,9 +1411,7 @@ _roof_top_one.helicopter.onClick = function(){ game.clear() }
 //=============================================================================================
 //꼭 맨 뒤에 선언, 아이템 선언이 먼저 나오므로
 
-_5th_floor_three.monster_heart = _5th_floor_three.createObject("monster_heart","monster_heart.png")
-_5th_floor_three.monster_heart.hide()
-_5th_floor_three.monster_heart.setItemDescription("펄떡..펄떡..")
+
 
 var quest_list = {
     0: {
@@ -1396,51 +1421,51 @@ var quest_list = {
     1: {
         "name": "Q1. 셔터를 내리자 !\n\n",
         "object": "game.getHandItem() || !game.getHandItem()",
-        "description": "건물 밖의 수 많은 좀비들이 따라오고 있다!\n출입문의 셔터를 내려 들어오지 못하게 차단하자.",
+        "description": "건물 밖의 수 많은 좀비들이 따라오고 있다!\n출입문의 셔터를 내려 들어오지 못하게 차단하자.\n\n"+
+        "QUEST:출입문 상단을 아래로 드래그하여 셔터를 내리자.",
         "flag": 0
     },
     2: {
         "name": "Q2. 알 수 없는 위압감..\n\n",
         "object" : "game.getHandItem() == _1st_floor_two.weapon_branch.obj",
-        "description": "휴... 이게 무슨 일일까..?\n우선 이 곳을 좀 더 돌아보자.",
+        "description": "휴... 이게 무슨 일일까..?\n우선 이 곳을 좀 더 돌아보자.\n\n+QUEST:튜토리얼대로 나뭇가지를 주어 좀비를 물리치자.",
         "flag": 0
     },
     3: {
         "name": "Q3. 사람이다 !\n\n",
         "object" : "game.getHandItem() || !game.getHandItem()",
-        "description": "알 수 없는 목소리의 출처가 이끄는대로 했지만...\n나에게 도움을 줄 수 있는 사람일까?\n우선, 엘리베이터를 타고 2층으로 가보자.",
+        "description": "알 수 없는 목소리의 출처가 이끄는대로 했지만...\n나에게 도움을 줄 수 있는 사람일까?\n우선, 엘리베이터를 타고 2층으로 가보자.\n\n"+
+        "QUEST:엘리베이터를 타고 2층으로 가서, 말을 걸어보자.",
         "flag": 0
     },
     4: {
         "name": "Q4. 이거... RPG 게임이야..?\n\n",
-        "object" : "_5th_floor_one_kill_counter == 20",
+        "object" : "_5th_floor_one_kill_counter == 0",
         "description": "아! 그러고보니, 부탁을 하나 해도 될까? 5층은 강당인데, 내가 그곳에\n물건 재고를 쌓아뒀거든.."+
         "그런데, 직원들이 전부 좀비로 변하는 바람에\n좀비소굴로 변해버렸어. 네가 그 녀석들 조금 처리해줬으면 좋겠어. 아!\n\n"+
-        "그리고 한 가지 좋은 팁을 주자면, 그곳의 좀비들은 너에게 돈을 줄 수도\n있을거야. 또, 그 좀비들은 무한히 나오는 것 같아"+
+        "그리고 한 가지 좋은 팁을 주자면, 그곳의 좀비들은 너에게 '돈'을 줄 수도\n있을거야. 또, 그 좀비들은 '무한히' 나오는 것 같아"+
         "\n\nQUEST:5층 사냥터에 가서 좀비 20마리를 사냥하세요.",
         "flag": 0
     },
     5: {
-        "name": "Q5. 이거... RPG 게임이야..?\n\n",
-        "object" : "_5th_floor_one_kill_counter == 20",
-        "description": "아! 그러고보니, 부탁을 하나 해도 될까? 5층은 강당인데, 내가 그곳에\n물건 재고를 쌓아뒀거든.."+
-        "그런데, 직원들이 전부 좀비로 변하는 바람에\n좀비소굴로 변해버렸어. 네가 그 녀석들 조금 처리해줬으면 좋겠어. 아!\n\n"+
-        "그리고 한 가지 좋은 팁을 주자면, 그곳의 좀비들은 너에게 돈을 줄 수도\n있을거야. 또, 그 좀비들은 무한히 나오는 것 같아"+
-        "\n\nQUEST:5층 사냥터에 가서 좀비 20마리를 사냥하세요.",
+        "name": "Q5. 괴상한 좀비..?\n\n",
+        "object" : "_4th_floor_two.db_zombie.obj.isLocked()",
+        "description": "수고했어! 덕분에 더 많은 양꼬치를 구워줄 수 있게 되었네~ㅎㅎ\n아 참~ 혹시 오고가며 이상한 소리 못들었어?"+
+        "못들었다고?..\n요 며칠 전부터 4층에서 괴상한 소리가 나는 것 같더라고... 뭐라더라..\n '디비디비딥...?' 뭐 어쨌든, 무슨 소리인지"+
+        "대신 알아봐줬으면 좋겠어\n그 소리 때문에 잠을 못자요...\n\nQUEST:4층의 디비디비딥 좀비를 물리치고 오세요.",
         "flag": 0
-    }
+    },
     6: {
-        "name": "Q5. 이거... RPG 게임이야..?\n\n",
-        "object" : "_5th_floor_one_kill_counter == 20",
-        "description": "아! 그러고보니, 부탁을 하나 해도 될까? 5층은 강당인데, 내가 그곳에\n물건 재고를 쌓아뒀거든.."+
-        "그런데, 직원들이 전부 좀비로 변하는 바람에\n좀비소굴로 변해버렸어. 네가 그 녀석들 조금 처리해줬으면 좋겠어. 아!\n\n"+
-        "그리고 한 가지 좋은 팁을 주자면, 그곳의 좀비들은 너에게 돈을 줄 수도\n있을거야. 또, 그 좀비들은 무한히 나오는 것 같아"+
-        "\n\nQUEST:5층 사냥터에 가서 좀비 20마리를 사냥하세요.",
+        "name": "Q6. 헬창 좀비야 덤벼라!\n\n",
+        "object" : "true",
+        "description": "뭐? 정말 그 요상한 게임을 하는 좀비가 있었단말야?\n흠... 어쩌면 유쾌하시던 조용진 부장님이 좀비로 변하신걸까..\n"
+        +"아하하, 그건 그렇고, 요새 자꾸 우리 매점의 양꼬치 재고가 비는 것 같아..\n좀비나 사람이나 도둑질을 하는건지.. 휴...\n"+
+        "CCTV를 보니까 3층 즈음으로 도망가는 것을 봤어\n3층 조사를 부탁할게 !\n\nQUEST:도둑놈을 쫓아 3층을 조사해보자",
         "flag": 0
     }
 }
 
 Player.quest_check();
 game.makeCombination(_5th_floor_three.potion.obj,_4th_floor_two.zombie_heart.obj,_5th_floor_three.monster_heart)
-game.start(_building_outside)
+game.start(_3rd_floor_three)
 game.printMessage("허억,,, 헉,,, 얼른 저 앞에 보이는 건물로 들어가자!!")
