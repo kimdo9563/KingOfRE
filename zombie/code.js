@@ -371,7 +371,7 @@ Player.quest_create()
 
 // weapon initialize
 // room, name, image, x_loc, y_loc, damage, skill_name, skill_damage
-_1st_floor_two.weapon_branch = new weapon(_1st_floor_two, "weapon_branch", "weapon_branch.png", 80, 600, 600, 5, "엄마의 회초리", 1, 0)
+_1st_floor_two.weapon_branch = new weapon(_1st_floor_two, "weapon_branch", "weapon_branch.png", 150, 400, 500, 5, "엄마의 회초리", 1, 0)
 _shop_itemlist.weapon_axe = new weapon(_shop_itemlist, "weapon_axe", "weapon_axe.png", 90, 90, 190, 10, "춤추는 회전도끼", 15, 50)
 _shop_itemlist.weapon_chainsaw = new weapon(_shop_itemlist, "weapon_chainsaw", "weapon_chainsaw.png", 100, 230, 190, 15, "텍사스의 추억", 30, 200)
 _shop_itemlist.weapon_lightsaber = new weapon(_shop_itemlist, "weapon_lightsaber", "weapon_lightsaber.png", 140, 370, 190, 30, "일격필살", 60, 400)
@@ -379,6 +379,7 @@ _shop_itemlist.weapon_railgun = new weapon(_shop_itemlist, "weapon_railgun", "we
 
 _shop_itemlist.lamb_sticks = new item(_shop_itemlist, "lamb_sticks", "lamb_sticks.png", 90, 1060, 450, 50, function() {Player.life_change(30)})
 _shop_itemlist.tsingtao = new item(_shop_itemlist, "tsingtao", "tsingtao.png", 30, 1200, 460, 50, function() {Player.stamina_change(50)} )
+
 
 // etc
 _5th_floor_three.monster_heart = _5th_floor_three.createObject("monster_heart","monster_heart.png")
@@ -662,7 +663,7 @@ _1st_floor_two.right_arrow = new arrow(_1st_floor_two, "right_arrow", _1st_floor
 
 _1st_floor_two.right_arrow.obj.hide()
 
-_1st_floor_two.click1 = new obj(_1st_floor_two, "click1", "click1.png", 200, 500, 600)
+_1st_floor_two.click1 = new obj(_1st_floor_two, "click1", "click1.png", 200, 300, 500)
 _1st_floor_two.click2 = new obj(_1st_floor_two, "click2", "click2.png", 200, 810, 550)
 
 _1st_floor_two.zombie = new zombie(_1st_floor_two, "zombie", "좀비_경찰.png", 200, 1000, 500, life=20, damage=2);
@@ -697,6 +698,7 @@ _1st_floor_three.elevator.onClick = function() {game.move(_elevator)}
 //=============================================================================================
 /* 2nd floor OR NPC */
 
+_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator, 100, 640, 650)
 _2nd_floor_one.shopNPC = new obj(_2nd_floor_one, "shopNPC", "_shop_npc.png", 300, 880, 235)
 
 _2nd_floor_one.shop_select_window = new obj(_2nd_floor_one, "shop_select_window", "shop_select_window.png", 1000, 640, 580)
@@ -756,9 +758,11 @@ _2nd_floor_one.shopNPC.onClick = function() {
     }
 }
 
-
-
-_2nd_floor_one.down_arrow = new arrow(_2nd_floor_one, "down_arrow", _elevator, 100, 640, 650)
+_2nd_floor_one.diary = new obj(_2nd_floor_one, "diary", "diary.png", 80, 900, 360)
+_2nd_floor_one.diary.obj.hide()
+_2nd_floor_one.diary.onClick = function(){
+	showImageViewer("diary_펼침.png", "")
+}
 
 
 _shop_itemlist.exit_button = new obj(_shop_itemlist, "exit_button", "button_exit.png", 100, 1200, 680)
@@ -1022,9 +1026,11 @@ _4th_floor_two.db_zombie.onClick = function(){
 _4th_floor_three.slot_machine_game = new obj(_4th_floor_three, "slot_machine_game", "슬롯머신_게임.png", 800, 640, 360)
 _4th_floor_three.slot_machine_game.obj.hide()
 _4th_floor_three.close_button = new obj(_4th_floor_three, "close_button", "button_exit.png", 100, 1200, 680)
+_4th_floor_three.close_button.obj.hide()
 _4th_floor_three.close_button.onClick = function(){
 	_4th_floor_three.slot_machine_game.obj.hide()
 	_4th_floor_three.slot_machine.obj.show()
+	_4th_floor_three.close_button.obj.hide()
 }
 
 _4th_floor_three.slot_machine = new obj(_4th_floor_three, "slot_machine", "슬롯머신_외관.png", 500, 200, 520)
@@ -1032,10 +1038,12 @@ _4th_floor_three.slot_machine.onClick = function() {
     printStory("한 번에 단돈 90원! \n 77 잭팟 당첨시 +10000 \n 11 또는 99 당첨시 +5000 \n 22 또는 00 또는 88당첨시 +3000 \n 11또는 33 또는 44 또는 55당첨시 +1000")
     _4th_floor_three.slot_machine_game.obj.show()
     _4th_floor_three.slot_machine.obj.hide()
+	_4th_floor_three.close_button.obj.show()
 }
 
 var slotArray = new Array(0, 0)
 _4th_floor_three.slot_machine_game.onClick = function(){
+	playSound("slotmachine.wav")
     if(Player.money > 30){
         slotArray[0] = Math.floor(Math.random()*10)
         slotArray[1] = Math.floor(Math.random()*10)
@@ -1063,9 +1071,9 @@ _4th_floor_three.slot_machine_game.onClick = function(){
         printMessage("소지금이 부족합니다.")
     }
 }
-
-
 // ***************************슬롯머신*************************
+
+
 
 
 //=============================================================================================
@@ -1537,3 +1545,4 @@ Player.quest_check();
 game.makeCombination(_5th_floor_three.potion.obj,_4th_floor_two.zombie_heart.obj,_5th_floor_three.monster_heart)
 game.start(_building_outside)
 game.printMessage("허억,,, 헉,,, 얼른 저 앞에 보이는 건물로 들어가자!!")
+//game.start(_4th_floor_three)
