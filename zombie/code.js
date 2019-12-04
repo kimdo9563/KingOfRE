@@ -629,7 +629,7 @@ _building_outside.building.onClick = function(){
 
 //==========================================================================================
 /* 1st floor */
-//_1st_floor_one.setRoomLight(0.5)
+_1st_floor_one.setRoomLight(0.5)
 _1st_floor_one.shutter = new empty_box(_1st_floor_one, "shutter", 360, 730, 200)
 _1st_floor_one.shutter.obj.setSprite("empty_box2.png")
 _1st_floor_one.shutter.onDrag = function(direction) {
@@ -836,6 +836,7 @@ _3rd_floor_one.chain.onClick = function(){
         printMessage("프로틴...근손실...")
         _3rd_floor_one.chain.obj.hide()
         _3rd_floor_one.health_door.obj.show()
+        _3rd_floor_one.muscle.obj.hide()
     })
 }
 
@@ -865,6 +866,10 @@ _3rd_floor_three.warning_yes.onClick = function() {
     _3rd_floor_three.dark_portal.obj.hide()
     _2nd_floor_one.shopNPC.obj.hide() //상점 npc hide
 }
+_3rd_floor_three.warning_no.onClick = function() {
+    game.move(_elevator);
+    printMessage("[SYSTEM] : 강해져서 돌아오세요.")
+}
 _3rd_floor_three.warning.obj.hide()
 _3rd_floor_three.warning_yes.obj.hide()
 _3rd_floor_three.warning_no.obj.hide()
@@ -880,11 +885,15 @@ _3rd_floor_three.dark_portal.onClick = function() {
         _3rd_floor_three.warning.obj.show()
         _3rd_floor_three.warning_yes.obj.show()
         _3rd_floor_three.warning_no.obj.show()
+        _2nd_floor_one.shopNPC.obj.hide()
     }
-  else {printMessage("뭐야.. 굉장히 기분 나쁜 기운이 흘러나오네.\n상점 아주머니에게 돌아가보자.")}
+  else {
+  _2nd_floor_one.shopNPC.obj.hide()
+  printMessage("뭐야.. 굉장히 기분 나쁜 기운이 흘러나오네.\n상점 아주머니에게 돌아가보자.")}
 }
 
 _3rd_floor_three.dark_portal.obj.hide()
+
 _3rd_floor_two.brain = new obj(_3rd_floor_two,"brain","fairy.png",500, 500, 400)
 _3rd_floor_two.start = new obj(_3rd_floor_two,"start","start_button.png",200,800,500)
 _3rd_floor_two.start.obj.hide()
@@ -1052,8 +1061,6 @@ _4th_floor_three.slot_machine_game.onClick = function(){
     } else {
         printMessage("소지금이 부족합니다.")
     }
-    _4th_floor_three.slot_machine_game.obj.hide()
-    _4th_floor_three.slot_machine.obj.show()
 }
 
 
@@ -1101,23 +1108,24 @@ _5th_floor_three.left_arrow.onClick = function(){
 
 _5th_floor_three.potion = new obj(_5th_floor_three,"potion","엘릭서.png",100,300,450)
 
-_5th_floor_one.zombie11 = new zombie(_5th_floor_one, "zombie11", "3층좀비_1.png", 120, 720, 600, 10, 3)
-_5th_floor_one.zombie11.onClick = function() { _5th_floor_one_kill_counter++; battle(this.room, this); }
-_5th_floor_one.zombie12 = new zombie(_5th_floor_one, "zombie12", "3층좀비_2.png", 120, 1000, 540, 10, 5)
-_5th_floor_one.zombie12.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++;}
-_5th_floor_one.zombie13 = new zombie(_5th_floor_one, "zombie13", "헬멧좀비.png", 120, 200, 550, 10, 3)
-_5th_floor_one.zombie13.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++;}
-_5th_floor_one.zombie14 = new zombie(_5th_floor_one, "zombie14", "헤드셋좀비.png", 120, 400, 510, 15, 5)
-_5th_floor_one.zombie14.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++;}
+// 버그 : 도망가도 돈이랑, 카운트
+_5th_floor_one.zombie11 = new zombie(_5th_floor_one, "zombie11", "3층좀비_1.png", 120, 720, 600, 35, 3)
+_5th_floor_one.zombie11.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++; Player.money_change(19)}
+_5th_floor_one.zombie12 = new zombie(_5th_floor_one, "zombie12", "3층좀비_2.png", 120, 1000, 540, 40, 5)
+_5th_floor_one.zombie12.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++; Player.money_change(21)}
+_5th_floor_one.zombie13 = new zombie(_5th_floor_one, "zombie13", "헬멧좀비.png", 120, 200, 550, 35, 3)
+_5th_floor_one.zombie13.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++; Player.money_change(18)}
+_5th_floor_one.zombie14 = new zombie(_5th_floor_one, "zombie14", "헤드셋좀비.png", 120, 400, 510, 45, 5)
+_5th_floor_one.zombie14.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++; Player.money_change(22)}
 
-_5th_floor_three.zombie21 = new zombie(_5th_floor_three, "zombie21", "zombie.png", 170, 750, 420, 10, 30)
-_5th_floor_three.zombie21.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++;}
-_5th_floor_three.zombie22 = new zombie(_5th_floor_three, "zombie22", "좀비_여자.png", 190, 1000, 540, 10, 5)
-_5th_floor_three.zombie22.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++;}
-_5th_floor_three.zombie23 = new zombie(_5th_floor_three, "zombie23", "좀비_남자.png", 200, 300, 550, 10, 35)
-_5th_floor_three.zombie23.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++;}
-_5th_floor_three.zombie24 = new zombie(_5th_floor_three, "zombie24", "좀비_야쿠자.png", 180, 520, 480, 10, 35)
-_5th_floor_three.zombie24.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++;}
+_5th_floor_three.zombie21 = new zombie(_5th_floor_three, "zombie21", "zombie.png", 170, 750, 420, 65, 10)
+_5th_floor_three.zombie21.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++; Player.money_change(51)}
+_5th_floor_three.zombie22 = new zombie(_5th_floor_three, "zombie22", "좀비_여자.png", 190, 1000, 540, 70, 13)
+_5th_floor_three.zombie22.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++; Player.money_change(60)}
+_5th_floor_three.zombie23 = new zombie(_5th_floor_three, "zombie23", "좀비_남자.png", 200, 300, 550, 57, 9)
+_5th_floor_three.zombie23.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++; Player.money_change(43)}
+_5th_floor_three.zombie24 = new zombie(_5th_floor_three, "zombie24", "좀비_야쿠자.png", 180, 520, 480, 80, 20)
+_5th_floor_three.zombie24.onClick = function() { battle(this.room, this); _5th_floor_one_kill_counter++; Player.money_change(70)}
 
 _5th_floor_three.potion.onClick = function(){
     _5th_floor_three.potion.obj.pick()
@@ -1508,6 +1516,14 @@ var quest_list = {
     },
     6: {
         "name": "Q6. 헬창 좀비야 덤벼라!\n\n",
+        "object" : "_3rd_floor_one.chain.obj.isClosed()",
+        "description": "뭐? 정말 그 요상한 게임을 하는 좀비가 있었단말야?\n흠... 어쩌면 유쾌하시던 조용진 부장님이 좀비로 변하신걸까..\n"
+        +"아하하, 그건 그렇고, 요새 자꾸 우리 매점의 양꼬치 재고가 비는 것 같아..\n좀비나 사람이나 도둑질을 하는건지.. 휴...\n"+
+        "CCTV를 보니까 3층 즈음으로 도망가는 것을 봤어\n3층 조사를 부탁할게 !\n\nQUEST:도둑놈을 쫓아 3층을 조사해보자",
+        "flag": 0
+    },
+    7: {
+        "name": "Q7. 사라진 아주머니와 정체불명의 쪽지!\n\n",
         "object" : "true",
         "description": "뭐? 정말 그 요상한 게임을 하는 좀비가 있었단말야?\n흠... 어쩌면 유쾌하시던 조용진 부장님이 좀비로 변하신걸까..\n"
         +"아하하, 그건 그렇고, 요새 자꾸 우리 매점의 양꼬치 재고가 비는 것 같아..\n좀비나 사람이나 도둑질을 하는건지.. 휴...\n"+
