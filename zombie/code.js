@@ -864,6 +864,7 @@ _3rd_floor_three.warning_yes.onClick = function() {
     game.move(_boss_room_1);
     printMessage("왼쪽 아래 생존자를\n우측의 방까지 이동시키세요")
     _3rd_floor_three.dark_portal.obj.hide()
+    _2nd_floor_one.shopNPC.obj.lock()
     _2nd_floor_one.shopNPC.obj.hide() //상점 npc hide
 }
 _3rd_floor_three.warning_no.onClick = function() {
